@@ -1,5 +1,6 @@
 import type { Stores } from 'hook/useStore';
 import { Provider } from 'mobx-react';
+import { SetupPage } from 'pages/SetupPage';
 import type { PlasmoCSConfig, PlasmoGetInlineAnchor, PlasmoMountShadowHost } from 'plasmo';
 import React from 'react';
 import { AuthStore, GithubStore } from 'store';
@@ -28,7 +29,9 @@ const Content: React.FC = () => {
   return (
     <>
       <React.StrictMode>
-        <Provider {...store}>asdf</Provider>
+        <Provider {...store}>
+          <SetupPage />
+        </Provider>
       </React.StrictMode>
     </>
   );
