@@ -1,6 +1,6 @@
 import type { Stores } from 'hook/useStore';
 import { Provider } from 'mobx-react';
-import { SetupPage } from 'pages/SetupPage';
+import { SetupPage } from 'page/SetupPage';
 import type { PlasmoCSConfig, PlasmoGetInlineAnchor, PlasmoMountShadowHost } from 'plasmo';
 import React from 'react';
 import { AuthStore, GithubStore } from 'store';
