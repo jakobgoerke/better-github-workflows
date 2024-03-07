@@ -41,13 +41,10 @@ export class AppStore {
     }
 
     const response = await this.client.getWorkflows(1);
-    console.log(response);
     this.workflows = response.workflows;
   };
 
   @action setFilter = (filter: string) => {
-    console.log(`filter: ${filter}`);
-
     this.filter = filter;
   }
 
