@@ -1,10 +1,9 @@
 import { MobXProviderContext } from 'mobx-react';
 import { useContext } from 'react';
-import type { AuthStore, GithubStore } from 'store';
+import type { AppStore } from 'store';
 
 interface Stores {
-  authStore: AuthStore;
-  githubStore: GithubStore;
+  appStore: AppStore;
 }
 
 const useStore = (): Stores => useContext(MobXProviderContext as any);

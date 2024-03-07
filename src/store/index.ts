@@ -1,2 +1,1 @@
-export * from './authStore';
-export * from './githubStore';
+export * from './appStore';
