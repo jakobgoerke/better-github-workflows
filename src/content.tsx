@@ -9,7 +9,7 @@ import { AppStore } from 'store';
 import { StyleSheetManager } from 'styled-components';
 
 export const config: PlasmoCSConfig = {
-  matches: ['https://github.com/*/*/actions*'],
+  matches: ['https://github.com/*'],
   run_at: 'document_start'
 };
 
@@ -39,7 +39,7 @@ const App: React.FC = () => {
 
 const styles = document.createElement('style');
 
-const Content: React.FC<PlasmoCSUIProps> = ({ anchor }) => {
+const Content: React.FC<PlasmoCSUIProps> = () => {
   return (
     <>
       <StyleSheetManager target={styles}>

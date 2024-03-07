@@ -12,11 +12,20 @@ export const GlobalStyles = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  #plasmo-inline {
+    flex: 0 0 100% !important;
+  }
+
   #root {
     position: relative;
     font-family: 'Segoe UI';
     font-size: 16px;
     font-weight: 400;
+    display: flex;
+  }
+
+  #plasmo-shadow-container {
+    display: flex;
   }
 
   code {

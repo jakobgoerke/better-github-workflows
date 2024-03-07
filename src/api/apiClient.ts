@@ -1,6 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { toJS } from 'mobx';
-import type { Workflow } from 'type/github';
+import type { GhResponse } from 'type/github';
 import type { Repository } from 'util/github';
 
 class ApiClient {
@@ -17,7 +16,7 @@ class ApiClient {
 
   private api: AxiosInstance;
 
-  public async getWorkflows(page: number): Promise<Workflow[]> {
+  public async getWorkflows(page: number): Promise<GhResponse.GetWorkflows> {
     return (
       (
         await this.api.get(`/actions/workflows`, {

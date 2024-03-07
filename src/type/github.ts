@@ -17,3 +17,10 @@ export interface Workflow {
   html_url: string;
   badge_url: string;
 }
+
+export namespace GhResponse {
+  export interface GetWorkflows {
+    total_count: number;
+    workflows: Workflow[];
+  }
+}

@@ -1,5 +1,5 @@
 import { ApiClient } from 'api/apiClient';
-import { action, makeAutoObservable, observable } from 'mobx';
+import { action, comparer, computed, makeAutoObservable, observable } from 'mobx';
 import type { Workflow } from 'type/github';
 import { getRepositoryFromUrl, type Repository } from 'util/github';
 import { storage } from 'util/storage';
@@ -12,12 +12,13 @@ export class AppStore {
     this.init();
   }
 
+  client: ApiClient = null;
+
   @observable token: string = '';
   @observable isAuthenticated: boolean = true;
   @observable repository: Repository = getRepositoryFromUrl();
-
-  client: ApiClient = null;
   
+  @observable filter: string = '';
   @observable workflows: Workflow[] = [];
   
   @action init = async () => {
@@ -39,6 +40,20 @@ export class AppStore {
       this.setupClient();
     }
 
-    this.workflows = await this.client.getWorkflows(1);
+    const response = await this.client.getWorkflows(1);
+    console.log(response);
+    this.workflows = response.workflows;
   };
+
+  @action setFilter = (filter: string) => {
+    console.log(`filter: ${filter}`);
+
+    this.filter = filter;
+  }
+
+  @computed get filteredWorkflows() {
+    return this.workflows.filter((workflow) => {
+      return workflow.name.toLowerCase().includes(this.filter.toLowerCase());
+    });
+  }
 }

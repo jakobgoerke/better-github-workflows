@@ -1,13 +1,11 @@
-const GITHUB_URL_REGEX = /https:\/\/github.com\/(.*)\/(.*)\//;
-
 export interface Repository {
   owner: string;
   name: string;
 }
 
 const getRepositoryFromUrl = (): Repository => {
-  const url = window.location.href;
-  const matches = url.match(GITHUB_URL_REGEX);
+  const url = window.location.pathname;
+  const matches = url.split('/').slice();
 
   return {
     owner: matches[1],
@@ -15,4 +13,8 @@ const getRepositoryFromUrl = (): Repository => {
   };
 };
 
-export { getRepositoryFromUrl };
+const getWorkflowFileNameFromPath = (path: string): string => {
+  return path.split('/').pop() ?? '';
+};
+
+export { getRepositoryFromUrl, getWorkflowFileNameFromPath };
