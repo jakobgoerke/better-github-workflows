@@ -6,8 +6,10 @@ const Heading: React.FC<PropsWithChildren> = ({ children }) => {
 };
 
 const _Heading = styled.span`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
+  display: flex;
+  align-content: center;
 `;
 
 export { Heading };

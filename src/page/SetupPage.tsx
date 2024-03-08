@@ -19,14 +19,16 @@ const SetupPage: React.FC = observer(() => {
 
   return (
     <Wrapper>
-      <Heading>Better Github Workflows</Heading>
+      <Heading>Settings</Heading>
       <Input
         placeholder="Please input an accesstoken..."
         value={token}
         type="password"
         onChange={(e) => setRenderValue(e.target.value)}
       />
-      <Span>The access token needs atleast workflow:read permission</Span>
+      <Span>
+        Needs atleast <b>workflow:read</b> permission
+      </Span>
       <Button onClick={save} disabled={!token}>
         Save
       </Button>

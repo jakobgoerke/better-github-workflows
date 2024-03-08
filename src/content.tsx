@@ -1,20 +1,16 @@
 import { GlobalStyles } from 'components/GlobalStyles';
-import { createMemoryHistory } from 'history';
-import { useStore, type Stores } from 'hook/useStore';
+import { type Stores } from 'hook/useStore';
 import { Provider } from 'mobx-react';
-import { RouterStore } from 'mobx-react-router';
-import { SetupPage } from 'page/SetupPage';
-import { WorkflowPage } from 'page/WorkflowPage';
 import type { PlasmoCSConfig, PlasmoCSUIProps, PlasmoGetInlineAnchor, PlasmoMountShadowHost } from 'plasmo';
 import React, { useEffect } from 'react';
-import { createMemoryRouter, Router, RouterProvider, type RouteObject } from 'react-router';
+import { RouterProvider } from 'react-router';
 import { AppStore } from 'store';
 import { StyleSheetManager } from 'styled-components';
 import { router } from 'util/router';
 
 export const config: PlasmoCSConfig = {
   matches: ['https://github.com/*'],
-  run_at: 'document_start'
+  run_at: 'document_end'
 };
 
 declare global {
@@ -29,15 +25,10 @@ if (!window.stores) {
   };
 }
 
-export const store = window.stores;
-
+const store = window.stores;
 const styles = document.createElement('style');
 
 const Content: React.FC<PlasmoCSUIProps> = () => {
-  useEffect(() => {
-    console.log('Content mounted');
-  });
-
   return (
     <>
       <StyleSheetManager target={styles}>
