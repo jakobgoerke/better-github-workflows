@@ -1,10 +1,11 @@
 import { MobXProviderContext } from 'mobx-react';
+import type { RouterStore } from 'mobx-react-router';
 import { useContext } from 'react';
 import type { AppStore } from 'store';
 
-interface Stores {
+type Stores = {
   appStore: AppStore;
-}
+};
 
 const useStore = (): Stores => useContext(MobXProviderContext as any);
 

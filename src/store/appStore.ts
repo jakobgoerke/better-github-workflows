@@ -39,7 +39,7 @@ export class AppStore {
     if (!this.client) {
       this.setupClient();
     }
-
+    
     const response = await this.client.getWorkflows(1);
     this.workflows = response.workflows;
   };

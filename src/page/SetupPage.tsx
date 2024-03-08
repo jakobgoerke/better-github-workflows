@@ -1,18 +1,35 @@
+import { Button } from 'components/Button';
 import { Heading } from 'components/Heading';
+import { Input } from 'components/Input';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { TOKEN_STORAGE_KEY } from 'store/appStore';
 import styled from 'styled-components';
+import { router } from 'util/router';
 
 import { useStorage } from '@plasmohq/storage/hook';
 
 const SetupPage: React.FC = observer(() => {
-  const [token, setToken, { setRenderValue, setStoreValue, remove }] = useStorage(TOKEN_STORAGE_KEY);
+  const [token, _, { setRenderValue, setStoreValue }] = useStorage(TOKEN_STORAGE_KEY, '');
+
+  const save = () => {
+    setStoreValue(token);
+    router.navigate('/workflows');
+  };
 
   return (
     <Wrapper>
       <Heading>Better Github Workflows</Heading>
-      <TokenInput value={token} onChange={(e) => setRenderValue(e.target.value)} />
+      <Input
+        placeholder="Please input an accesstoken..."
+        value={token}
+        type="password"
+        onChange={(e) => setRenderValue(e.target.value)}
+      />
+      <Span>The access token needs atleast workflow:read permission</Span>
+      <Button onClick={save} disabled={!token}>
+        Save
+      </Button>
     </Wrapper>
   );
 });
@@ -23,8 +40,9 @@ const Wrapper = styled.div`
   gap: 16px;
 `;
 
-const TokenInput = styled.input`
-  width: 100%;
+const Span = styled.span`
+  font-size: 12px;
+  color: #848d97;
 `;
 
 export { SetupPage };

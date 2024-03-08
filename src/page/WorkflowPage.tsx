@@ -27,6 +27,7 @@ const Wrapper = styled.div`
   display: flex;
   flex: 0 0 100%;
   flex-direction: column;
+  gap: 16px;
 `;
 
 export { WorkflowPage };

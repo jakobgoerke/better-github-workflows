@@ -13,7 +13,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   #plasmo-inline {
-    flex: 0 0 100% !important;
+    display: block !important;
   }
 
   #root {
@@ -25,7 +25,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   #plasmo-shadow-container {
-    display: flex;
+    display: block;
   }
 
   code {

@@ -1,12 +1,16 @@
 import { GlobalStyles } from 'components/GlobalStyles';
+import { createMemoryHistory } from 'history';
 import { useStore, type Stores } from 'hook/useStore';
 import { Provider } from 'mobx-react';
+import { RouterStore } from 'mobx-react-router';
 import { SetupPage } from 'page/SetupPage';
 import { WorkflowPage } from 'page/WorkflowPage';
 import type { PlasmoCSConfig, PlasmoCSUIProps, PlasmoGetInlineAnchor, PlasmoMountShadowHost } from 'plasmo';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { createMemoryRouter, Router, RouterProvider, type RouteObject } from 'react-router';
 import { AppStore } from 'store';
 import { StyleSheetManager } from 'styled-components';
+import { router } from 'util/router';
 
 export const config: PlasmoCSConfig = {
   matches: ['https://github.com/*'],
@@ -27,26 +31,20 @@ if (!window.stores) {
 
 export const store = window.stores;
 
-const App: React.FC = () => {
-  const { appStore } = useStore();
-
-  if (!appStore.token) {
-    return <SetupPage />;
-  }
-
-  return <WorkflowPage />;
-};
-
 const styles = document.createElement('style');
 
 const Content: React.FC<PlasmoCSUIProps> = () => {
+  useEffect(() => {
+    console.log('Content mounted');
+  });
+
   return (
     <>
       <StyleSheetManager target={styles}>
         <React.StrictMode>
           <Provider {...store}>
             <GlobalStyles />
-            <App />
+            <RouterProvider router={router} />
           </Provider>
         </React.StrictMode>
       </StyleSheetManager>
