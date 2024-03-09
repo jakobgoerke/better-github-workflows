@@ -1,6 +1,4 @@
-import { Button } from 'components/Button';
-import { Heading } from 'components/Heading';
-import { Input } from 'components/Input';
+import { Button, Heading, Input } from 'components/common';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { TOKEN_STORAGE_KEY } from 'store/appStore';

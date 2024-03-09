@@ -1,5 +1,4 @@
-import axios from 'axios';
-import type { AxiosInstance } from 'axios';
+import axios, { type AxiosInstance } from 'axios';
 import type { GhResponse } from 'type/github';
 import type { Repository } from 'util/github';
 

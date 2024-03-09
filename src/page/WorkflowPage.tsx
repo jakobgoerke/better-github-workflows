@@ -1,7 +1,5 @@
-import { Heading } from 'components/Heading';
-import { SettingsButton } from 'components/SettingsButton';
-import { WorkflowFilter } from 'components/WorkflowFilter';
-import { WorkflowList } from 'components/WorkflowList';
+import { Heading } from 'components/common/Heading';
+import { SettingsButton, WorkflowFilter, WorkflowList } from 'components/workflow';
 import { useStore } from 'hook/useStore';
 import { SettingsIcon as _SettingsIcon } from 'icon/Settings';
 import { observer } from 'mobx-react';

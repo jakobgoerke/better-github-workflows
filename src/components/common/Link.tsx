@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import React, { type AnchorHTMLAttributes, type PropsWithChildren } from 'react';
+import React, { type PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 interface Linkprops extends PropsWithChildren {

@@ -1,7 +1,7 @@
-import { Link } from 'components/Link';
+import { Link } from 'components/common';
 import { useStore } from 'hook/useStore';
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { getWorkflowFileNameFromPath } from 'util/github';
 
