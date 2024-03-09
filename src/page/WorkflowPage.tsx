@@ -13,8 +13,10 @@ const WorkflowPage: React.FC = observer(() => {
   const { appStore } = useStore();
 
   useEffect(() => {
+    console.log('load workflows');
+
     appStore.loadWorkflows();
-  }, [appStore.token]);
+  }, [appStore.repository]);
 
   const handleSettingsClick = () => {
     router.navigate('/setup');

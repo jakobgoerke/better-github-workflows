@@ -20,6 +20,7 @@ export class AppStore {
   
   @observable filter: string = '';
   @observable workflows: Workflow[] = [];
+  @observable isLoading: boolean = false;
   @observable error: boolean = false;
   
   @action init = async () => {
@@ -41,6 +42,10 @@ export class AppStore {
   };
 
   @action loadWorkflows = async (page: number = 1) => {
+    if (this.isLoading) {
+      return;
+    }
+
     if (!this.client) {
       this.setupClient();
     }
@@ -49,19 +54,22 @@ export class AppStore {
       this.workflows = [];
     }
 
+    this.isLoading = true;
     try {
+      
       const response = (await this.client.getWorkflows(page));
 
-      if (response.total_count > page * 100) {
-        this.loadWorkflows(page + 1);
-      }
-
       runInAction(() => {
+        this.isLoading = false;
         this.workflows.push(...response.workflows);
+        if (response.total_count >= (page * 100)) {
+          this.loadWorkflows(page + 1);
+        }
         this.error = false;
       });
     } catch (error) {
       runInAction(() => {
+        this.isLoading = false;
         this.error = true;
       });
     }
