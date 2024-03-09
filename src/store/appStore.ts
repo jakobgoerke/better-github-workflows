@@ -33,6 +33,7 @@ export class AppStore {
     storage.watch({
       [TOKEN_STORAGE_KEY]: (change) => {
         this.token = change.newValue;
+        this.loadWorkflows();
       }
     });
   }
