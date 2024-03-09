@@ -45,14 +45,19 @@ export class AppStore {
       this.setupClient();
     }
 
+    if (page === 1) {
+      this.workflows = [];
+    }
+
     try {
       const response = (await this.client.getWorkflows(page));
+
       if (response.total_count > page * 100) {
         this.loadWorkflows(page + 1);
       }
 
       runInAction(() => {
-        this.workflows = response.workflows;
+        this.workflows.push(...response.workflows);
         this.error = false;
       });
     } catch (error) {
