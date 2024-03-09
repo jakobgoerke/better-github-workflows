@@ -1,6 +1,6 @@
-import { test, expect } from './fixtures';
+import { test } from './fixtures';
 
-test('mount first setup', async ({ page }) => {
+test('happypath', async ({ page }) => {
   await page.goto('https://github.com/jakobgoerke/better-github-workflows/actions');
 
   await page.getByTestId('page-setup');
