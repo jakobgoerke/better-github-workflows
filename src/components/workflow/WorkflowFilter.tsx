@@ -2,7 +2,7 @@ import { useStore } from 'hook/useStore';
 import { observer } from 'mobx-react';
 import React, { type ChangeEvent } from 'react';
 
-import { Input } from './Input';
+import { Input } from '../common/Input';
 
 const WorkflowFilter: React.FC = observer(() => {
   const { appStore } = useStore();
