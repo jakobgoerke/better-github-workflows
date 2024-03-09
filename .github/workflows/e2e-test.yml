@@ -1,0 +1,13 @@
+name: e2e-test-workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: I am just some pipeline for the e2e test
+      run: echo "weeeeeeeeee"
