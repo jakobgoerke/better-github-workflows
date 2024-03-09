@@ -1,7 +1,7 @@
 {
   "name": "better-github-workflows",
   "displayName": "Better Github Workflows",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Better Github Workflows",
   "author": "revdev <mail@revdev.me>",
   "scripts": {

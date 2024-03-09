@@ -1,5 +1,5 @@
 import { ApiClient } from 'api/apiClient';
-import { action, computed, makeAutoObservable, observable } from 'mobx';
+import { action, computed, makeAutoObservable, observable, runInAction } from 'mobx';
 import type { Workflow } from 'type/github';
 import { getRepositoryFromUrl, type Repository } from 'util/github';
 import { router } from 'util/router';
@@ -40,17 +40,26 @@ export class AppStore {
     this.client = new ApiClient(this.token, this.repository);
   };
 
-  @action loadWorkflows = async () => {
+  @action loadWorkflows = async (page: number = 1) => {
     if (!this.client) {
       this.setupClient();
     }
 
     try {
-      this.workflows = (await this.client.getWorkflows(1)).workflows;
+      const response = (await this.client.getWorkflows(page));
+      if (response.total_count > page * 100) {
+        this.loadWorkflows(page + 1);
+      }
+
+      runInAction(() => {
+        this.workflows = response.workflows;
+        this.error = false;
+      });
     } catch (error) {
-      this.error = true;
+      runInAction(() => {
+        this.error = true;
+      });
     }
-    
   };
 
   @action setFilter = (filter: string) => {
