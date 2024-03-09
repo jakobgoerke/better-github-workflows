@@ -56,7 +56,6 @@ export class AppStore {
 
     this.isLoading = true;
     try {
-      
       const response = await this.client.getWorkflows(page);
 
       runInAction(() => {
