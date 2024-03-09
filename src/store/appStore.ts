@@ -2,7 +2,7 @@ import { GithubClient } from 'api/apiClient';
 import { action, computed, makeAutoObservable, observable, runInAction } from 'mobx';
 import type { Workflow } from 'type/github';
 import { getRepositoryFromUrl, type Repository } from 'util/github';
-import { router } from 'util/router';
+import { Routes, router } from 'util/router';
 import { storage } from 'util/storage';
 
 export const TOKEN_STORAGE_KEY = 'githubToken';
@@ -27,7 +27,7 @@ export class AppStore {
     this.token = await storage.get(TOKEN_STORAGE_KEY);
 
     if (this.token) {
-      router.navigate('/workflows');
+      router.navigate(Routes.Workflows);
     }
 
     storage.watch({

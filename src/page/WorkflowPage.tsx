@@ -5,7 +5,7 @@ import { SettingsIcon as _SettingsIcon } from 'icon/Settings';
 import { observer } from 'mobx-react';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { router } from 'util/router';
+import { Routes, router } from 'util/router';
 
 const WorkflowPage: React.FC = observer(() => {
   const { appStore } = useStore();
@@ -15,7 +15,7 @@ const WorkflowPage: React.FC = observer(() => {
   }, [appStore.repository]);
 
   const handleSettingsClick = () => {
-    router.navigate('/setup');
+    router.navigate(Routes.Setup);
   };
 
   return (

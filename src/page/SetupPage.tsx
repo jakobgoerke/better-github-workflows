@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import React from 'react';
 import { TOKEN_STORAGE_KEY } from 'store/appStore';
 import styled from 'styled-components';
-import { router } from 'util/router';
+import { Routes, router } from 'util/router';
 
 import { useStorage } from '@plasmohq/storage/hook';
 
@@ -12,7 +12,7 @@ const SetupPage: React.FC = observer(() => {
 
   const save = () => {
     setStoreValue(token);
-    router.navigate('/workflows');
+    router.navigate(Routes.Workflows);
   };
 
   return (
