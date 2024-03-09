@@ -7,11 +7,13 @@
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
-    "package": "plasmo package"
+    "package": "plasmo package",
+    "e2e": "yarn build && playwright test"
   },
   "dependencies": {
     "@plasmohq/storage": "^1.9.3",
     "axios": "^1.6.7",
+    "dotenv": "^16.4.5",
     "framer-motion": "^11.0.8",
     "mobx": "^6.12.0",
     "mobx-react": "^9.1.0",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
+    "@playwright/test": "^1.42.1",
     "@types/chrome": "0.0.258",
     "@types/node": "20.11.5",
     "@types/react": "18.2.48",

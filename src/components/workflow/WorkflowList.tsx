@@ -16,7 +16,7 @@ const WorkflowList: React.FC = observer(() => {
   return (
     <Wrapper>
       {appStore.filteredWorkflows.map((workflow) => (
-        <Link key={workflow.id} href={buildWorkflowLink(workflow.path)}>
+        <Link data-testid='workflow-link' key={workflow.id} href={buildWorkflowLink(workflow.path)}>
           {workflow.name}
         </Link>
       ))}

@@ -19,7 +19,7 @@ const WorkflowPage: React.FC = observer(() => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper data-testid="page-workflows">
       <Head>
         <Heading>Actions</Heading>
         <SettingsButton onClick={handleSettingsClick} />

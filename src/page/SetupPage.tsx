@@ -1,24 +1,27 @@
 import { Button, Heading, Input } from 'components/common';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { TOKEN_STORAGE_KEY } from 'store/appStore';
+import { AppStore, TOKEN_STORAGE_KEY } from 'store/appStore';
 import styled from 'styled-components';
 import { Routes, router } from 'util/router';
 
 import { useStorage } from '@plasmohq/storage/hook';
+import { useStore } from 'hook/useStore';
 
 const SetupPage: React.FC = observer(() => {
+  const { appStore } = useStore();
   const [token, _, { setRenderValue, setStoreValue }] = useStorage(TOKEN_STORAGE_KEY, '');
 
   const save = () => {
-    setStoreValue(token);
+    appStore.setToken(token);
     router.navigate(Routes.Workflows);
   };
 
   return (
-    <Wrapper>
+    <Wrapper data-testid="page-setup">
       <Heading>Settings</Heading>
       <Input
+        data-testid="token-input"
         placeholder="Please input an accesstoken..."
         value={token}
         type="password"
@@ -27,7 +30,7 @@ const SetupPage: React.FC = observer(() => {
       <Span>
         Needs atleast <b>workflow:read</b> permission
       </Span>
-      <Button onClick={save} disabled={!token}>
+      <Button data-testid="token-save" onClick={save} disabled={!token}>
         Save
       </Button>
     </Wrapper>

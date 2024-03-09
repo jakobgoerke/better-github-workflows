@@ -29,13 +29,11 @@ export class AppStore {
     if (this.token) {
       router.navigate(Routes.Workflows);
     }
+  }
 
-    storage.watch({
-      [TOKEN_STORAGE_KEY]: (change) => {
-        this.token = change.newValue;
-        this.loadWorkflows();
-      }
-    });
+  @action setToken = (token: string) => {
+    this.token = token;
+    storage.setItem(TOKEN_STORAGE_KEY, token);
   }
 
   @action setupClient = () => {

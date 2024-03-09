@@ -1,14 +1,11 @@
-import { motion } from 'framer-motion';
-import React, { type PropsWithChildren } from 'react';
+import { motion, type MotionProps } from 'framer-motion';
+import React, { type AnchorHTMLAttributes, type PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
-interface Linkprops extends PropsWithChildren {
-  href: string;
-}
-
-const Link: React.FC<Linkprops> = ({ children, href }) => {
+const Link: React.FC<MotionProps & AnchorHTMLAttributes<HTMLAnchorElement>> = ({ children, href, ...rest }) => {
   return (
     <_Link
+      {...rest}
       whileHover={{
         backgroundColor: 'rgba(255, 255, 255, 0.1)'
       }}
