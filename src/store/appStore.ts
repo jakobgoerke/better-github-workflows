@@ -1,4 +1,4 @@
-import { GithubClient } from 'api/githubClient';
+import { GithubClient } from 'client/githubClient';
 import { action, computed, makeAutoObservable, observable, runInAction } from 'mobx';
 import type { Workflow } from 'type/github';
 import { getRepositoryFromUrl, type Repository } from 'util/github';
