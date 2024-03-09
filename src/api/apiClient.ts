@@ -2,7 +2,7 @@ import axios, { type AxiosInstance } from 'axios';
 import type { GhResponse } from 'type/github';
 import type { Repository } from 'util/github';
 
-class ApiClient {
+class GithubClient {
   constructor(token: string, repository: Repository) {
     this.api = axios.create({
       baseURL: `https://api.github.com/repos/${repository.owner}/${repository.name}`,
@@ -30,4 +30,4 @@ class ApiClient {
   }
 }
 
-export { ApiClient };
+export { GithubClient };

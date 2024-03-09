@@ -1,4 +1,4 @@
-import { ApiClient } from 'api/apiClient';
+import { GithubClient } from 'api/apiClient';
 import { action, computed, makeAutoObservable, observable, runInAction } from 'mobx';
 import type { Workflow } from 'type/github';
 import { getRepositoryFromUrl, type Repository } from 'util/github';
@@ -13,7 +13,7 @@ export class AppStore {
     this.init();
   }
 
-  client: ApiClient = null;
+  client: GithubClient = null;
 
   @observable token: string = '';
   @observable repository: Repository = getRepositoryFromUrl();
@@ -38,7 +38,7 @@ export class AppStore {
   }
 
   @action setupClient = () => {
-    this.client = new ApiClient(this.token, this.repository);
+    this.client = new GithubClient(this.token, this.repository);
   };
 
   @action loadWorkflows = async (page: number = 1) => {
