@@ -6,13 +6,9 @@ import styled from 'styled-components';
 const SettingsButton: React.FC<MotionProps & HTMLAttributes<HTMLDivElement>> = ({ ...rest }) => {
   return (
     <Wrapper {...rest} whileHover={wrapperHover}>
-      <SettingsIcon whileHover={settingsHover} />
+      <SettingsIcon />
     </Wrapper>
   );
-};
-
-const settingsHover: TargetAndTransition = {
-  scale: 1
 };
 
 const wrapperHover: TargetAndTransition = {
