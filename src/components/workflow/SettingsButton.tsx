@@ -2,6 +2,7 @@ import { motion, type MotionProps, type TargetAndTransition } from 'framer-motio
 import React, { type HTMLAttributes } from 'react';
 import styled from 'styled-components';
 
+import { theme } from '~components/ThemeProvider';
 import { SettingsIcon } from '~icon/Settings';
 
 const SettingsButton: React.FC<MotionProps & HTMLAttributes<HTMLDivElement>> = ({ ...rest }) => {
@@ -13,13 +14,12 @@ const SettingsButton: React.FC<MotionProps & HTMLAttributes<HTMLDivElement>> = (
 };
 
 const wrapperHover: TargetAndTransition = {
-  border: '1px solid rgb(48, 54, 61)',
-  backgroundColor: 'rgb(48, 54, 61)',
+  backgroundColor: theme().hoverBg,
   cursor: 'pointer'
 };
 
 const Wrapper = styled(motion.div)`
-  border: 1px solid transparent;
+  background-color: transparent;
   border-radius: 4px;
   align-self: center;
   display: flex;

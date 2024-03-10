@@ -28,7 +28,7 @@ const WorkflowList: React.FC = observer(() => {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  border-top: 1px solid rgba(48, 54, 61, 0.48);
+  border-top: 1px solid ${({ theme }) => theme.border};
 `;
 
 export { WorkflowList };

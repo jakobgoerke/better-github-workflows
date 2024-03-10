@@ -7,7 +7,7 @@ const Input: React.FC<InputHTMLAttributes<HTMLInputElement>> = observer(({ ...re
 });
 
 const _Input = styled.input`
-  border: 1px solid rgb(48, 54, 61);
+  border: 1px solid ${({ theme }) => theme.border};
   border-radius: 4px;
   padding: 5px 12px;
   background-color: transparent;

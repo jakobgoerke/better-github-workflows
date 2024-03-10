@@ -5,6 +5,7 @@ import { RouterProvider } from 'react-router';
 import { StyleSheetManager } from 'styled-components';
 
 import { GlobalStyles } from '~components/GlobalStyles';
+import { ThemeProvider } from '~components/ThemeProvider';
 import { type Stores } from '~hook/useStore';
 import { AppStore } from '~store';
 import { router } from '~util/router';
@@ -35,8 +36,10 @@ const Content: React.FC<PlasmoCSUIProps> = () => {
       <StyleSheetManager target={styles}>
         <React.StrictMode>
           <Provider {...store}>
-            <GlobalStyles />
-            <RouterProvider router={router} />
+            <ThemeProvider>
+              <GlobalStyles />
+              <RouterProvider router={router} />
+            </ThemeProvider>
           </Provider>
         </React.StrictMode>
       </StyleSheetManager>

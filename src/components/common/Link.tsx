@@ -2,12 +2,14 @@ import { motion, type MotionProps } from 'framer-motion';
 import React, { type AnchorHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
+import { theme } from '~components/ThemeProvider';
+
 const Link: React.FC<MotionProps & AnchorHTMLAttributes<HTMLAnchorElement>> = ({ children, href, ...rest }) => {
   return (
     <_Link
       {...rest}
       whileHover={{
-        backgroundColor: 'rgba(255, 255, 255, 0.1)'
+        backgroundColor: theme().hoverBg
       }}
       href={href}>
       {children}
@@ -22,7 +24,7 @@ const _Link = styled(motion.a)`
   background-color: transparent;
   padding: 8px;
   border-radius: 4px;
-  color: #fff;
+  color: ${({ theme }) => theme.fg};
   text-overflow: ellipsis;
 `;
 
