@@ -1,7 +1,8 @@
 import { motion, type MotionProps, type TargetAndTransition } from 'framer-motion';
-import { SettingsIcon } from 'icon/Settings';
 import React, { type HTMLAttributes } from 'react';
 import styled from 'styled-components';
+
+import { SettingsIcon } from '~icon/Settings';
 
 const SettingsButton: React.FC<MotionProps & HTMLAttributes<HTMLDivElement>> = ({ ...rest }) => {
   return (

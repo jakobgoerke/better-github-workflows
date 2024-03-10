@@ -1,5 +1,5 @@
 import { motion, type MotionProps } from 'framer-motion';
-import React, { type AnchorHTMLAttributes, type PropsWithChildren } from 'react';
+import React, { type AnchorHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 const Link: React.FC<MotionProps & AnchorHTMLAttributes<HTMLAnchorElement>> = ({ children, href, ...rest }) => {

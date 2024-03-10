@@ -1,9 +1,10 @@
-import { GithubClient } from 'client/githubClient';
 import { action, computed, makeAutoObservable, observable, runInAction } from 'mobx';
-import type { Workflow } from 'type/github';
-import { getRepositoryFromUrl, type Repository } from 'util/github';
-import { Routes, router } from 'util/router';
-import { storage } from 'util/storage';
+
+import { GithubClient } from '~client/githubClient';
+import type { Workflow } from '~type/github';
+import { getRepositoryFromUrl, type Repository } from '~util/github';
+import { Routes, router } from '~util/router';
+import { storage } from '~util/storage';
 
 export const TOKEN_STORAGE_KEY = 'githubToken';
 

@@ -1,12 +1,12 @@
-import { Button, Heading, Input } from 'components/common';
+import { useStorage } from '@plasmohq/storage/hook';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { TOKEN_STORAGE_KEY } from 'store/appStore';
 import styled from 'styled-components';
-import { Routes, router } from 'util/router';
 
-import { useStorage } from '@plasmohq/storage/hook';
-import { useStore } from 'hook/useStore';
+import { Button, Heading, Input } from '~components/common';
+import { useStore } from '~hook/useStore';
+import { TOKEN_STORAGE_KEY } from '~store/appStore';
+import { router, Routes } from '~util/router';
 
 const SetupPage: React.FC = observer(() => {
   const { appStore } = useStore();

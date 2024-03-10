@@ -1,11 +1,12 @@
-import { SetupPage } from 'page/SetupPage';
-import { WorkflowPage } from 'page/WorkflowPage';
 import { createMemoryRouter, type RouteObject } from 'react-router';
+
+import { SetupPage } from '~page/SetupPage';
+import { WorkflowPage } from '~page/WorkflowPage';
 
 export enum Routes {
   Setup = '/setup',
   Workflows = '/workflows'
-} 
+}
 
 const routes: RouteObject[] = [
   {

@@ -1,12 +1,13 @@
-import { GlobalStyles } from 'components/GlobalStyles';
-import { type Stores } from 'hook/useStore';
 import { Provider } from 'mobx-react';
 import type { PlasmoCSConfig, PlasmoCSUIProps, PlasmoGetInlineAnchor, PlasmoMountShadowHost } from 'plasmo';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { RouterProvider } from 'react-router';
-import { AppStore } from 'store';
 import { StyleSheetManager } from 'styled-components';
-import { router } from 'util/router';
+
+import { GlobalStyles } from '~components/GlobalStyles';
+import { type Stores } from '~hook/useStore';
+import { AppStore } from '~store';
+import { router } from '~util/router';
 
 export const config: PlasmoCSConfig = {
   matches: ['https://github.com/*'],

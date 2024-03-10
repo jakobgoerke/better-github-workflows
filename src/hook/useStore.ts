@@ -1,6 +1,7 @@
 import { MobXProviderContext } from 'mobx-react';
 import { useContext } from 'react';
-import type { AppStore } from 'store';
+
+import type { AppStore } from '~store';
 
 type Stores = {
   appStore: AppStore;
