@@ -13,7 +13,8 @@ const SettingsButton: React.FC<MotionProps & HTMLAttributes<HTMLDivElement>> = (
 
 const wrapperHover: TargetAndTransition = {
   border: '1px solid rgb(48, 54, 61)',
-  backgroundColor: 'rgb(48, 54, 61)'
+  backgroundColor: 'rgb(48, 54, 61)',
+  cursor: 'pointer'
 };
 
 const Wrapper = styled(motion.div)`
@@ -22,10 +23,6 @@ const Wrapper = styled(motion.div)`
   align-self: center;
   display: flex;
   padding: 8px;
-
-  :hover {
-    cursor: pointer;
-  }
 `;
 
 export { SettingsButton };

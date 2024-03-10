@@ -13,15 +13,12 @@ const _Button = styled(motion.button)`
   padding: 5px 12px;
   background-color: transparent;
   align-self: self-start;
-
-  :hover {
-    cursor: pointer;
-  }
 `;
 
 const buttonHover: TargetAndTransition = {
   border: '1px solid rgb(48, 54, 61)',
-  backgroundColor: 'rgb(48, 54, 61)'
+  backgroundColor: 'rgb(48, 54, 61)',
+  cursor: 'pointer'
 };
 
 export { Button };

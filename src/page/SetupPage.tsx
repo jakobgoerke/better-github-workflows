@@ -1,7 +1,7 @@
 import { Button, Heading, Input } from 'components/common';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { AppStore, TOKEN_STORAGE_KEY } from 'store/appStore';
+import { TOKEN_STORAGE_KEY } from 'store/appStore';
 import styled from 'styled-components';
 import { Routes, router } from 'util/router';
 
@@ -10,7 +10,7 @@ import { useStore } from 'hook/useStore';
 
 const SetupPage: React.FC = observer(() => {
   const { appStore } = useStore();
-  const [token, _, { setRenderValue, setStoreValue }] = useStorage(TOKEN_STORAGE_KEY, '');
+  const [token, _, { setRenderValue }] = useStorage(TOKEN_STORAGE_KEY, '');
 
   const save = () => {
     appStore.setToken(token);
