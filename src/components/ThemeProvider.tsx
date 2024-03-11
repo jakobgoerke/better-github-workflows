@@ -2,6 +2,7 @@ import React, { type PropsWithChildren } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
 type Theme = 'light' | 'dark';
+type ColorMode = Theme | 'auto';
 
 interface AppTheme {
   fg: string;
@@ -30,11 +31,13 @@ const themes: Map<Theme, AppTheme> = new Map([
 ]);
 
 const getSelectedGithubTheme = (): Theme => {
-  const colorMode = document.documentElement.getAttribute('data-color-mode');
-  const lightTheme = document.documentElement.getAttribute('data-light-theme');
-  const darkTheme = document.documentElement.getAttribute('data-dark-theme');
+  const colorMode = document.documentElement.getAttribute('data-color-mode') as unknown as ColorMode;
 
-  return (colorMode === 'light' ? lightTheme : darkTheme) as unknown as Theme;
+  if (colorMode === 'auto') {
+    return window?.matchMedia?.('(prefers-color-scheme:dark)')?.matches ? 'dark' : 'light';
+  }
+
+  return colorMode;
 };
 
 export const theme = () => themes.get(getSelectedGithubTheme()) || dark;

@@ -33,16 +33,16 @@ const styles = document.createElement('style');
 const Content: React.FC<PlasmoCSUIProps> = () => {
   return (
     <>
-      <StyleSheetManager target={styles}>
-        <React.StrictMode>
+      <React.StrictMode>
+        <StyleSheetManager target={styles}>
           <Provider {...store}>
             <ThemeProvider>
               <GlobalStyles />
               <RouterProvider router={router} />
             </ThemeProvider>
           </Provider>
-        </React.StrictMode>
-      </StyleSheetManager>
+        </StyleSheetManager>
+      </React.StrictMode>
     </>
   );
 };
