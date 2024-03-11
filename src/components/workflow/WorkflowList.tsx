@@ -21,6 +21,11 @@ const WorkflowList: React.FC = observer(() => {
           {workflow.name}
         </Link>
       ))}
+      {!appStore.doneLoading && (
+        <LoadMore data-testid="workflow-load-more" key="loadMore" onClick={() => appStore.loadRemainingPages()}>
+          Load more…
+        </LoadMore>
+      )}
     </Wrapper>
   );
 });
@@ -29,6 +34,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   border-top: 1px solid ${({ theme }) => theme.border};
+`;
+
+const LoadMore = styled(Link)`
+  color: ${({ theme }) => theme.accentFg};
 `;
 
 export { WorkflowList };

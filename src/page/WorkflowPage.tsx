@@ -12,7 +12,7 @@ const WorkflowPage: React.FC = observer(() => {
   const { appStore } = useStore();
 
   useEffect(() => {
-    appStore.loadWorkflows();
+    appStore.loadFirstPage();
   }, [appStore.repository]);
 
   const handleSettingsClick = () => {

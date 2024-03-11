@@ -6,6 +6,7 @@ type ColorMode = Theme | 'auto';
 
 interface AppTheme {
   fg: string;
+  accentFg: string;
   bg: string;
   hoverBg: string;
   border: string;
@@ -13,6 +14,7 @@ interface AppTheme {
 
 const dark: AppTheme = {
   fg: '#e6edf3',
+  accentFg: '#2f81f7',
   bg: '#161b22',
   hoverBg: 'rgba(177, 186, 196, 0.12)',
   border: '#30363d'
@@ -20,6 +22,7 @@ const dark: AppTheme = {
 
 const light: AppTheme = {
   fg: '#1F2328',
+  accentFg: '#2f81f7',
   bg: '#f6f8fa',
   hoverBg: 'rgba(208,215,222,0.32)',
   border: '#d0d7de'
