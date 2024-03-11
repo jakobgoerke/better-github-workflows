@@ -1,12 +1,12 @@
 {
   "name": "better-github-workflows",
   "displayName": "Better Github Workflows",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Better Github Workflows",
   "author": "revdev <mail@revdev.me>",
   "scripts": {
     "dev": "plasmo dev",
-    "build": "plasmo build",
+    "build": "plasmo build --target=chrome-mv3 && plasmo build --target=firefox-mv3",
     "package": "plasmo package",
     "e2e": "yarn build && playwright test"
   },

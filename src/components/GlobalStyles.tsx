@@ -3,16 +3,13 @@ import { createGlobalStyle } from 'styled-components';
 export const GlobalStyles = createGlobalStyle`
   * {
     box-sizing: border-box;
-    font-family: 'Segoe UI';
-    color: ${({ theme }) => theme.fg};
-  }
 
-  html,
-  body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    color: ${({ theme }) => theme.fg};
   }
-
+  
   #plasmo-inline {
     display: block !important;
   }
