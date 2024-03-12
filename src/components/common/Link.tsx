@@ -9,8 +9,7 @@ const Link: React.FC<MotionProps & AnchorHTMLAttributes<HTMLAnchorElement>> = ({
     <_Link
       {...rest}
       whileHover={{
-        backgroundColor: theme().hoverBg,
-        cursor: 'pointer'
+        backgroundColor: theme().hoverBg
       }}
       href={href}>
       {children}

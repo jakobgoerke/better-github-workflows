@@ -20,10 +20,8 @@ export class AppStore {
   @observable repository: Repository = getRepositoryFromUrl();
   
   @observable filter: string = '';
-  @observable totalPages: number = 1;
-  @observable doneLoading: boolean = false;
-
   @observable workflows: Workflow[] = [];
+  @observable isLoading: boolean = false;
   @observable error: boolean = false;
   
   @action init = async () => {
@@ -43,46 +41,41 @@ export class AppStore {
     this.client = new GithubClient(this.token, this.repository);
   };
 
-  @action loadFirstPage = async () => {
-    if (this.doneLoading) return;
+  @action loadWorkflows = async (page: number = 1) => {
+    if (this.isLoading) {
+      return;
+    }
 
     if (!this.client) {
       this.setupClient();
     }
 
-    this.workflows = [];
-    const firstPage = await this.client.getWorkflows(1);
-
-    runInAction(() => {
-      this.workflows = firstPage.workflows;
-      this.totalPages = Math.floor(firstPage.total_count / 100) || 1;
-
-      if (this.totalPages === 1) {
-        this.doneLoading = true;
-      }
-    });
-  };
-
-  @action loadRemainingPages = async (): Promise<void> => {
-    if (this.doneLoading) {
-      return;
+    if (page === 1) {
+      this.workflows = [];
     }
 
-    const remainingPages = Array.from({ length: this.totalPages - 1 }, (_, i) => i + 2);
-    const pages = await Promise.all(remainingPages.map((page) => this.client.getWorkflows(page)));
+    this.isLoading = true;
+    try {
+      const response = await this.client.getWorkflows(page);
 
-    runInAction(() => {
-      this.workflows = pages.reduce((acc, page) => acc.concat(page.workflows), this.workflows);
-      this.doneLoading = true;
-    });
+      runInAction(() => {
+        this.isLoading = false;
+        this.workflows.push(...response.workflows);
+        if (response.total_count >= (page * 100)) {
+          this.loadWorkflows(page + 1);
+        }
+        this.error = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.isLoading = false;
+        this.error = true;
+      });
+    }
   };
 
-  @action setFilter = async (filter: string) => {
-    await this.loadRemainingPages();
-
-    runInAction(() => {
-      this.filter = filter;
-    });
+  @action setFilter = (filter: string) => {
+    this.filter = filter;
   }
 
   @computed get filteredWorkflows() {
