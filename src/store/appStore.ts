@@ -89,5 +89,6 @@ export class AppStore {
 
   private setupClient = () => {
     this.client = new GithubClient(this.token, this.repository);
+    this.workflows = [];
   };
 }
