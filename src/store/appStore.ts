@@ -30,10 +30,6 @@ export class AppStore {
       router.navigate(Routes.Workflows);
     }
 
-    setInterval(() => {
-      console.log('still alive')
-    }, 1000);
-
     window.addEventListener('turbo:load', (e) => {
       // @ts-ignore
       const url = new URL(e.detail.url);
