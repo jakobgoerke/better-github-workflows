@@ -30,6 +30,10 @@ export class AppStore {
       router.navigate(Routes.Workflows);
     }
 
+    setInterval(() => {
+      console.log('still alive')
+    }, 1000);
+
     window.addEventListener('turbo:load', (e) => {
       // @ts-ignore
       const url = new URL(e.detail.url);
@@ -89,6 +93,5 @@ export class AppStore {
 
   private setupClient = () => {
     this.client = new GithubClient(this.token, this.repository);
-    this.workflows = [];
   };
 }
