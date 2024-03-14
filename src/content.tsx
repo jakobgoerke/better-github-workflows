@@ -6,8 +6,7 @@ import { StyleSheetManager } from 'styled-components';
 
 import { GlobalStyles } from '~components/GlobalStyles';
 import { ThemeProvider } from '~components/ThemeProvider';
-import { type Stores } from '~hook/useStore';
-import { AppStore } from '~store';
+import { rootStore } from '~hook/useStore';
 import { router } from '~util/router';
 
 export const config: PlasmoCSConfig = {
@@ -15,19 +14,6 @@ export const config: PlasmoCSConfig = {
   run_at: 'document_end'
 };
 
-declare global {
-  interface Window {
-    stores: Stores;
-  }
-}
-
-if (!window.stores) {
-  window.stores = {
-    appStore: new AppStore()
-  };
-}
-
-const store = window.stores;
 const styles = document.createElement('style');
 
 const Content: React.FC<PlasmoCSUIProps> = () => {
@@ -35,7 +21,7 @@ const Content: React.FC<PlasmoCSUIProps> = () => {
     <>
       <React.StrictMode>
         <StyleSheetManager target={styles}>
-          <Provider {...store}>
+          <Provider value={rootStore}>
             <ThemeProvider>
               <GlobalStyles />
               <RouterProvider router={router} />

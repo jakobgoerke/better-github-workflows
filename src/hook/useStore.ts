@@ -1,13 +1,17 @@
-import { MobXProviderContext } from 'mobx-react';
-import { useContext } from 'react';
+import { createContext, useContext } from 'react';
 
-import type { AppStore } from '~store';
+import { AppStore } from '~store';
 
 type Stores = {
   appStore: AppStore;
 };
 
-const useStore = (): Stores => useContext(MobXProviderContext as any);
+const rootStore: Stores = {
+  appStore: new AppStore()
+};
 
-export { useStore };
+const StoreContext = createContext(rootStore);
+const useStore = (): Stores => useContext(StoreContext);
+
+export { useStore, rootStore };
 export type { Stores };
