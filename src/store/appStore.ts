@@ -2,7 +2,7 @@ import { action, computed, makeAutoObservable, observable, runInAction } from 'm
 
 import { GithubClient } from '~client/githubClient';
 import type { Workflow } from '~type/github';
-import { getRepositoryFromUrl, type Repository } from '~util/github';
+import { getRepositoryFromPath, type Repository } from '~util/github';
 import { Routes, router } from '~util/router';
 import { storage } from '~util/storage';
 
@@ -17,8 +17,8 @@ export class AppStore {
   client: GithubClient = null;
 
   @observable token: string = '';
-  @observable repository: Repository = getRepositoryFromUrl();
   
+  @observable repository: Repository = getRepositoryFromPath(window.location.pathname);
   @observable filter: string = '';
   @observable workflows: Workflow[] = [];
   @observable isLoading: boolean = false;
@@ -26,28 +26,31 @@ export class AppStore {
   
   @action init = async () => {
     this.token = await storage.get(TOKEN_STORAGE_KEY);
-
     if (this.token) {
       router.navigate(Routes.Workflows);
     }
+
+    window.addEventListener('turbo:load', (e) => {
+      // @ts-ignore
+      const url = new URL(e.detail.url);
+      this.setRepository(getRepositoryFromPath(url.pathname));
+    });
+  }
+
+  @action setRepository = (repository: Repository) => {
+    this.repository = repository;
+    this.setupClient();
   }
 
   @action setToken = (token: string) => {
     this.token = token;
     storage.setItem(TOKEN_STORAGE_KEY, token);
+    this.setupClient();
   }
 
-  @action setupClient = () => {
-    this.client = new GithubClient(this.token, this.repository);
-  };
-
   @action loadWorkflows = async (page: number = 1) => {
-    if (this.isLoading) {
+    if (this.isLoading || !this.client) {
       return;
-    }
-
-    if (!this.client) {
-      this.setupClient();
     }
 
     if (page === 1) {
@@ -83,4 +86,8 @@ export class AppStore {
       return workflow.name.toLowerCase().includes(this.filter.toLowerCase());
     });
   }
+
+  private setupClient = () => {
+    this.client = new GithubClient(this.token, this.repository);
+  };
 }

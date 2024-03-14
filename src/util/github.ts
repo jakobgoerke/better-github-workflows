@@ -3,8 +3,7 @@ export interface Repository {
   name: string;
 }
 
-const getRepositoryFromUrl = (): Repository => {
-  const url = window.location.pathname;
+const getRepositoryFromPath = (url): Repository => {
   const matches = url.split('/').slice();
 
   return {
@@ -17,4 +16,4 @@ const getWorkflowFileNameFromPath = (path: string): string => {
   return path.split('/').pop() ?? '';
 };
 
-export { getRepositoryFromUrl, getWorkflowFileNameFromPath };
+export { getRepositoryFromPath, getWorkflowFileNameFromPath };
