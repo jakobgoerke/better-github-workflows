@@ -14,7 +14,12 @@ const WorkflowFilter: React.FC = observer(() => {
     appStore.setFilter(e.target.value);
   };
 
-  return <Input data-testid="input-workflowfilter" placeholder="Filter…" onChange={handleFilterChange} />;
+  return <Input
+    data-testid="input-workflowfilter"
+    placeholder="Filter…"
+    onChange={handleFilterChange}
+    onKeyDown={(e) => e.stopPropagation()}
+  />;
 });
 
 export { WorkflowFilter };
