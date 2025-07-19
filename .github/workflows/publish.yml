@@ -1,0 +1,37 @@
+name: Build and Publish Firefox Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build
+
+      - name: Install web-ext globally
+        run: yarn global add web-ext
+
+      - name: Build and sign Firefox extension
+        run: |
+          web-ext sign \
+            --source-dir=build/firefox-mv3-prod
+            --api-key="${{ secrets.FIREFOX_STORE_JWT_ISSUER }}" \
+            --api-secret="${{ secrets.FIREFOX_STORE_JWT_SECRET }}" \
+            --channel=listed
