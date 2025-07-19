@@ -6,7 +6,7 @@
   "author": "revdev <mail@revdev.me>",
   "scripts": {
     "dev": "plasmo dev",
-    "build": "plasmo build --target=firefox-mv3",
+    "build": "plasmo build --target=chrome-mv3 && plasmo build --target=firefox-mv3",
     "package": "plasmo package",
     "e2e": "yarn build && playwright test"
   },
