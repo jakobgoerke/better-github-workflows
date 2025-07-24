@@ -13,9 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - uses: ./.github/actions/build
-
-      - uses: ./.github/actions/test
+      - name: build
+        uses: ./.github/actions/build
+        
+      - name: run tests
+        uses: ./.github/actions/test
         env:
           E2E_PAT: ${{ secrets.E2E_PAT }}
 

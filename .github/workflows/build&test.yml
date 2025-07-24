@@ -18,3 +18,5 @@ jobs:
 
       - name: run tests
         uses: ./.github/actions/test
+        env:
+          E2E_PAT: ${{ secrets.E2E_PAT }}
