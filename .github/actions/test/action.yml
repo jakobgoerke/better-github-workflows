@@ -1,0 +1,11 @@
+name: test
+runs:
+  using: "composite"
+  steps:
+    - name: Install playwright browsers
+      run: yarn playwright install --with-deps
+
+    - name: Run e2e tests
+      run: yarn e2e
+      env:
+        E2E_PAT: ${{ env.E2E_PAT }}

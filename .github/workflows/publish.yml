@@ -13,25 +13,31 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'yarn'
+      - uses: ./.github/actions/build
 
-      - name: Install dependencies
-        run: yarn install
+      - uses: ./.github/actions/test
+        env:
+          E2E_PAT: ${{ secrets.E2E_PAT }}
 
-      - name: Build
-        run: yarn build
-
-      - name: Install web-ext globally
+      - name: Install web-ext
         run: yarn global add web-ext
 
-      - name: Build and sign Firefox extension
+      - name: Publish firefox
         run: |
           web-ext sign \
-            --source-dir=build/firefox-mv3-prod \
-            --api-key="${{ secrets.FIREFOX_STORE_JWT_ISSUER }}" \
-            --api-secret="${{ secrets.FIREFOX_STORE_JWT_SECRET }}" \
-            --channel=listed
+            --source-dir "build/firefox-mv3-prod" \
+            --api-key "${{ secrets.FIREFOX_STORE_JWT_ISSUER }}" \
+            --api-secret "${{ secrets.FIREFOX_STORE_JWT_SECRET }}" \
+            --channel "listed"
+
+      - name: Install chrome webstore upload client
+        run: yarn global add chrome-webstore-upload-cli
+
+      - name: Publish Chrome
+        run: |
+          chrome-webstore-upload \
+            --source "build/chrome-mv3-prod" \
+            --extension-id "${{ secrets.CHROME_STORE_CLIENT_ID }}" \
+            --client-id "${{ secrets.CHROME_STORE_CLIENT_ID }}" \
+            --client-secret "${{ secrets.CHROME_STORE_CLIENT_SECRET }}" \
+            --refresh-token "${{ secrets.CHROME_STORE_REFRESH_TOKEN }}"

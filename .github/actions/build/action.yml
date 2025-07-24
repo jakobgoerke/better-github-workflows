@@ -1,0 +1,17 @@
+name: build
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'yarn'
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Build Firefox app
+      run: yarn build:firefox
+
+    - name: Build Chrome app
+      run: yarn build:chrome
