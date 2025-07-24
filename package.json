@@ -9,7 +9,7 @@
     "build:firefox": "plasmo build --target=firefox-mv3",
     "build:chrome": "plasmo build --target=chrome-mv3",
     "package": "plasmo package",
-    "e2e": "yarn build && playwright test"
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@plasmohq/storage": "1.15.0",
