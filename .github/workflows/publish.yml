@@ -32,7 +32,7 @@ jobs:
             --api-secret "${{ secrets.FIREFOX_STORE_JWT_SECRET }}" \
             --channel "listed"
 
-      - name: Install chrome webstore upload client
+      - name: Install chrome webstore upload cli
         run: yarn global add chrome-webstore-upload-cli
 
       - name: Publish Chrome
