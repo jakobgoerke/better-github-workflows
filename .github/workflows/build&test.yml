@@ -13,6 +13,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - uses: ./.github/actions/build
+      - name: build
+        uses: ./.github/actions/build
 
-      - uses: ./.github/actions/test
+      - name: run tests
+        uses: ./.github/actions/test
