@@ -8,10 +8,13 @@ runs:
         cache: 'yarn'
 
     - name: Install dependencies
+      shell: bash
       run: yarn install --frozen-lockfile
 
     - name: Build Firefox app
+      shell: bash
       run: yarn build:firefox
 
     - name: Build Chrome app
+      shell: bash
       run: yarn build:chrome
