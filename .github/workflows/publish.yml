@@ -15,7 +15,7 @@ jobs:
 
       - name: build
         uses: ./.github/actions/build
-        
+
       - name: run tests
         uses: ./.github/actions/test
         env:
@@ -39,7 +39,7 @@ jobs:
         run: |
           chrome-webstore-upload \
             --source "build/chrome-mv3-prod" \
-            --extension-id "${{ secrets.CHROME_STORE_CLIENT_ID }}" \
+            --extension-id "${{ secrets.CHROME_STORE_EXTENSION_ID }}" \
             --client-id "${{ secrets.CHROME_STORE_CLIENT_ID }}" \
             --client-secret "${{ secrets.CHROME_STORE_CLIENT_SECRET }}" \
             --refresh-token "${{ secrets.CHROME_STORE_REFRESH_TOKEN }}"
