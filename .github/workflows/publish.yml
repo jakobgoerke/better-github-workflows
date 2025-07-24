@@ -1,4 +1,4 @@
-name: Build and Publish Firefox Extension
+name: publish
 
 on:
   push:
