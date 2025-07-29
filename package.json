@@ -15,7 +15,7 @@
     "@plasmohq/storage": "1.15.0",
     "axios": "1.10.0",
     "dotenv": "17.2.0",
-    "framer-motion": "12.23.6",
+    "framer-motion": "11.11.9",
     "mobx": "6.13.7",
     "mobx-react": "9.2.0",
     "mobx-react-router": "6.1.0",
