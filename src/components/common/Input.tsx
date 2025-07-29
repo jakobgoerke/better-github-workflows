@@ -1,12 +1,12 @@
-import { motion, type TargetAndTransition } from 'framer-motion';
+import { motion, type HTMLMotionProps, type TargetAndTransition } from 'framer-motion';
 import { observer } from 'mobx-react';
-import React, { type InputHTMLAttributes } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { theme } from '~components/ThemeProvider';
 import { ClearIcon } from '~icon/Clear';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends HTMLMotionProps<'input'> {
   withClearButton?: boolean;
   onClear?: () => void;
 }
@@ -14,7 +14,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 const Input: React.FC<InputProps> = observer(({ withClearButton, onClear, ...rest }) => {
   return (
     <Container>
-      <_Input {...rest} />
+      <_Input whileFocus={inputFocus} className="form-control" {...rest} />
       {withClearButton && (
         <ClearButton type="button" onClick={onClear} whileHover={wrapperHover}>
           <ClearIcon />
@@ -30,12 +30,19 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const _Input = styled.input`
+const _Input = styled(motion.input)`
   border: 1px solid ${({ theme }) => theme.border};
   border-radius: 4px;
   padding: 5px 12px;
   background-color: transparent;
+  outline: none;
 `;
+
+const inputFocus: TargetAndTransition = {
+  borderColor: theme().focusColor,
+  outline: 'none',
+  boxShadow: `inset 0 0 1px ${theme().focusColor}`
+};
 
 const ClearButton = styled(motion.button)`
   display: flex;
@@ -46,7 +53,7 @@ const ClearButton = styled(motion.button)`
   background: none;
   border: none;
   cursor: pointer;
-  color: ${({ theme }) => theme.textSecondary};
+  color: ${({ theme }) => theme.fg};
   font-size: 14px;
   padding: 7px;
   border-radius: 4px;

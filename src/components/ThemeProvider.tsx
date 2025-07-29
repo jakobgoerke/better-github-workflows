@@ -10,14 +10,16 @@ const dark: AppTheme = {
   fg: '#e6edf3',
   bg: '#161b22',
   hoverBg: 'rgba(177, 186, 196, 0.12)',
-  border: '#30363d'
+  border: '#30363d',
+  focusColor: '#1f6feb'
 };
 
 const light: AppTheme = {
   fg: '#1F2328',
   bg: '#f6f8fa',
   hoverBg: 'rgba(208,215,222,0.32)',
-  border: '#d0d7de'
+  border: '#d0d7de',
+  focusColor: '#0969da'
 };
 
 const themes: Map<Theme, AppTheme> = new Map([

@@ -5,6 +5,7 @@ export interface AppTheme {
   bg: string;
   hoverBg: string;
   border: string;
+  focusColor: string;
 }
 
 declare module 'styled-components' {
