@@ -1,15 +1,10 @@
 import React, { type PropsWithChildren } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
+import type { AppTheme } from '~types/styled';
+
 type Theme = 'light' | 'dark';
 type ColorMode = Theme | 'auto';
-
-interface AppTheme {
-  fg: string;
-  bg: string;
-  hoverBg: string;
-  border: string;
-}
 
 const dark: AppTheme = {
   fg: '#e6edf3',
