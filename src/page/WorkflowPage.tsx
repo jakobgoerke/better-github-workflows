@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Heading } from '~components/common/Heading';
 import { SettingsButton, WorkflowFilter, WorkflowList } from '~components/workflow';
 import { useStore } from '~hook/useStore';
-import { SettingsIcon as _SettingsIcon } from '~icon/Settings';
 import { router, Routes } from '~util/router';
 
 const WorkflowPage: React.FC = observer(() => {

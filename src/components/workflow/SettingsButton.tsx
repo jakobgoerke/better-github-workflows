@@ -23,7 +23,8 @@ const Wrapper = styled(motion.div)`
   border-radius: 4px;
   align-self: center;
   display: flex;
-  padding: 8px;
+  padding: 6px;
+  font-size: 14px;
 `;
 
 export { SettingsButton };
