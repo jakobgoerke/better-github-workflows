@@ -20,6 +20,6 @@ const routes: RouteObject[] = [
 ];
 
 export const router = createMemoryRouter(routes, {
-  initialEntries: [Routes.Setup],
+  initialEntries: [Routes.Workflows],
   initialIndex: 1
 });

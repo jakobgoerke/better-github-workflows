@@ -8,11 +8,11 @@ import { useStore } from '~hook/useStore';
 import { router, Routes } from '~util/router';
 
 const WorkflowPage: React.FC = observer(() => {
-  const { appStore } = useStore();
+  const { repositoryStore, workflowStore } = useStore();
 
   useEffect(() => {
-    appStore.loadWorkflows();
-  }, [appStore.repository]);
+    workflowStore.loadAllWorkflows();
+  }, [repositoryStore.repository]);
 
   const handleSettingsClick = () => {
     router.navigate(Routes.Setup);
@@ -26,7 +26,6 @@ const WorkflowPage: React.FC = observer(() => {
       </Head>
       <WorkflowFilter />
       <WorkflowList />
-      {appStore.error && <Error>Failed to load workflows…</Error>}
     </Wrapper>
   );
 });

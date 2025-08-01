@@ -1,4 +1,3 @@
-import { Provider } from 'mobx-react';
 import type { PlasmoCSConfig, PlasmoCSUIProps, PlasmoGetInlineAnchor, PlasmoMountShadowHost } from 'plasmo';
 import React from 'react';
 import { RouterProvider } from 'react-router';
@@ -6,7 +5,7 @@ import { StyleSheetManager } from 'styled-components';
 
 import { GlobalStyles } from '~components/GlobalStyles';
 import { ThemeProvider } from '~components/ThemeProvider';
-import { rootStore } from '~hook/useStore';
+import { RootStoreProvider } from '~hook/useStore';
 import { router } from '~util/router';
 
 export const config: PlasmoCSConfig = {
@@ -25,12 +24,12 @@ const Content: React.FC<PlasmoCSUIProps> = () => {
     <>
       <React.StrictMode>
         <StyleSheetManager target={styles}>
-          <Provider value={rootStore}>
+          <RootStoreProvider>
             <ThemeProvider>
               <GlobalStyles />
               <RouterProvider router={router} />
             </ThemeProvider>
-          </Provider>
+          </RootStoreProvider>
         </StyleSheetManager>
       </React.StrictMode>
     </>

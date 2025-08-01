@@ -5,15 +5,15 @@ import styled from 'styled-components';
 
 import { Button, Heading, Input } from '~components/common';
 import { useStore } from '~hook/useStore';
-import { TOKEN_STORAGE_KEY } from '~store/appStore';
+import { TOKEN_STORAGE_KEY } from '~store/repositoryStore';
 import { router, Routes } from '~util/router';
 
 const SetupPage: React.FC = observer(() => {
-  const { appStore } = useStore();
+  const { repositoryStore } = useStore();
   const [token, _, { setRenderValue }] = useStorage(TOKEN_STORAGE_KEY, '');
 
   const save = () => {
-    appStore.setToken(token);
+    repositoryStore.setToken(token);
     router.navigate(Routes.Workflows);
   };
 

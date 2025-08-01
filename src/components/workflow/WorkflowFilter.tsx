@@ -5,13 +5,13 @@ import { Input } from '~components/common';
 import { useStore } from '~hook/useStore';
 
 const WorkflowFilter: React.FC = observer(() => {
-  const { appStore } = useStore();
+  const { workflowStore } = useStore();
 
   const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
-    appStore.setFilter(e.target.value);
+    workflowStore.setFilter(e.target.value);
   };
 
   return (
@@ -20,9 +20,9 @@ const WorkflowFilter: React.FC = observer(() => {
       placeholder="Filter…"
       onChange={handleFilterChange}
       onKeyDown={(e) => e.stopPropagation()}
-      withClearButton={!!appStore.filter}
-      onClear={() => appStore.setFilter('')}
-      value={appStore.filter}
+      withClearButton={!!workflowStore.filter}
+      onClear={() => workflowStore.setFilter('')}
+      value={workflowStore.filter}
     />
   );
 });

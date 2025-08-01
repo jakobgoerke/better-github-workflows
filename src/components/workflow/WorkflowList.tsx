@@ -8,20 +8,20 @@ import type { Workflow } from '~type/github';
 import { getWorkflowFileNameFromPath } from '~util/github';
 
 const WorkflowList: React.FC = observer(() => {
-  const { appStore } = useStore();
+  const { repositoryStore, workflowStore } = useStore();
 
   const buildWorkflowLink = (path: string): string => {
     const file = getWorkflowFileNameFromPath(path);
-    return `https://github.com/${appStore.repository.owner}/${appStore.repository.name}/actions/workflows/${file}`;
+    return `https://github.com/${repositoryStore.repository.owner}/${repositoryStore.repository.name}/actions/workflows/${file}`;
   };
 
   const sortByName = (a: Workflow, b: Workflow) => {
     return a.name.localeCompare(b.name);
-  }
+  };
 
   return (
     <Wrapper>
-      {appStore.filteredWorkflows.sort(sortByName).map((workflow) => (
+      {workflowStore.filteredWorkflows.sort(sortByName).map((workflow) => (
         <Link data-testid="workflow-link" key={workflow.id} href={buildWorkflowLink(workflow.path)}>
           {workflow.name}
         </Link>
