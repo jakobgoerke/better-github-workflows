@@ -37,7 +37,7 @@
   },
   "manifest": {
     "host_permissions": [
-      "*://github.com/*"
+      "https://github.com/*"
     ],
     "browser_specific_settings": {
       "gecko": {

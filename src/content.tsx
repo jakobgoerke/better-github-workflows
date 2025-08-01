@@ -10,7 +10,11 @@ import { rootStore } from '~hook/useStore';
 import { router } from '~util/router';
 
 export const config: PlasmoCSConfig = {
-  matches: ['https://github.com/*'],
+  matches: [
+    'https://github.com/*/*/actions',
+    'https://github.com/*/*/actions/runs/*',
+    'https://github.com/*/*/actions/workflows/*.yml'
+  ],
   run_at: 'document_end'
 };
 
