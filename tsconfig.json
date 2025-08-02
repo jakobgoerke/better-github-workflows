@@ -8,6 +8,7 @@
     "paths": {
       "~*": ["*"]
     },
-    "baseUrl": "./src/"
+    "baseUrl": "./src/",
+    "types": ["vitest/globals"]
   }
 }

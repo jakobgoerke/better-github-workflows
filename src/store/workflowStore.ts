@@ -23,19 +23,19 @@ export class WorkflowStore {
   }
 
   @action public loadAllWorkflows = async () => {
-    if (this.isLoading || !this.repositoryStore.client) {
+    if (this.isLoading) {
       return;
     }
 
     this.setLoading(true);
-    const firstResult = await this.repositoryStore.client.getWorkflows(1);
+    const firstResult = await this.repositoryStore.githubClient.getWorkflows(1);
     this.workflows = firstResult.workflows;
 
-    const remainingPages = Math.ceil(firstResult.total_count / 100) - 1;
+    const remainingPages = Math.ceil(firstResult.total_count / 100);
 
     const pagePromises = [];
-    for (let page = 2; page <= remainingPages + 1; page++) {
-      pagePromises.push(this.repositoryStore.client.getWorkflows(page));
+    for (let page = 2; page <= remainingPages; page++) {
+      pagePromises.push(this.repositoryStore.githubClient.getWorkflows(page));
     }
 
     const results = await Promise.all(pagePromises);

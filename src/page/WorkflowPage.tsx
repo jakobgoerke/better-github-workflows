@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import { Heading } from '~components/common/Heading';
 import { SettingsButton, WorkflowFilter, WorkflowList } from '~components/workflow';
 import { useStore } from '~hook/useStore';
-import { router, Routes } from '~util/router';
+import { router } from '~util/router';
+import { Routes } from '~util/routes';
 
 const WorkflowPage: React.FC = observer(() => {
   const { repositoryStore, workflowStore } = useStore();

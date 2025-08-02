@@ -3,7 +3,7 @@ export interface Repository {
   name: string;
 }
 
-const getRepositoryFromPath = (url): Repository => {
+const getRepositoryFromPath = (url: string): Repository => {
   const matches = url.split('/').slice();
 
   return {

@@ -2,7 +2,8 @@ import { action, makeAutoObservable, observable } from 'mobx';
 
 import { GithubClient } from '~client/githubClient';
 import { getRepositoryFromPath, type Repository } from '~util/github';
-import { Routes, router } from '~util/router';
+import { router } from '~util/router';
+import { Routes } from '~util/routes';
 import { storage } from '~util/storage';
 
 export const TOKEN_STORAGE_KEY = 'githubToken';
@@ -13,7 +14,7 @@ export class RepositoryStore {
     this.init();
   }
 
-  public client: GithubClient | null = null;
+  public githubClient: GithubClient | null = null;
 
   @observable token: string = '';
   @observable repository: Repository;
@@ -45,6 +46,6 @@ export class RepositoryStore {
   };
 
   private setupClient = () => {
-    this.client = new GithubClient(this.token, this.repository);
+    this.githubClient = new GithubClient(this.token, this.repository);
   };
 }

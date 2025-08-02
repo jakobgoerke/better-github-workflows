@@ -3,7 +3,15 @@ export interface GetWorkflowsResponse {
   workflows: Workflow[];
 }
 
-export type WorkflowState = 'active' | 'deleted' | 'disabled_fork' | 'disabled_inactivity' | 'disabled_manually';
+export const WorkflowStates = {
+  ACTIVE: 'active',
+  DELETED: 'deleted',
+  DISABLED_FORK: 'disabled_fork',
+  DISABLED_INACTIVITY: 'disabled_inactivity',
+  DISABLED_MANUALLY: 'disabled_manually'
+} as const;
+
+export type WorkflowState = (typeof WorkflowStates)[keyof typeof WorkflowStates];
 
 export interface Workflow {
   id: number;
