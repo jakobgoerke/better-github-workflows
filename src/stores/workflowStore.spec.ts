@@ -1,7 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import type { GithubClient } from '~clients/githubClient';
-import { WorkflowStates } from '~types/github';
+import { GithubClient, WorkflowStates } from '~clients/githubClient';
 
 import type { RepositoryStore } from './repositoryStore';
 import { RootStore } from './rootStore';
