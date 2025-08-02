@@ -23,13 +23,14 @@ export class WorkflowStore {
   }
 
   @action public loadAllWorkflows = async () => {
-    if (this.isLoading) {
+    if (!this.repositoryStore.githubClient || this.isLoading) {
+      console.warn('GitHub client is not set or already loading workflows');
       return;
     }
 
     this.setLoading(true);
     const firstResult = await this.repositoryStore.githubClient.getWorkflows(1);
-    this.workflows = firstResult.workflows;
+    this.setWorkflows(firstResult.workflows);
 
     const remainingPages = Math.ceil(firstResult.total_count / 100);
 
@@ -41,7 +42,7 @@ export class WorkflowStore {
     const results = await Promise.all(pagePromises);
 
     results.forEach((res) => {
-      this.workflows.push(...res.workflows);
+      this.addWorkflows(res.workflows);
     });
 
     this.setLoading(false);
@@ -53,5 +54,13 @@ export class WorkflowStore {
 
   @action private setLoading(loading: boolean) {
     this.isLoading = loading;
+  }
+
+  @action private setWorkflows(workflows: Workflow[]) {
+    this.workflows = workflows;
+  }
+
+  @action private addWorkflows(workflows: Workflow[]) {
+    this.workflows.push(...workflows);
   }
 }

@@ -13,7 +13,7 @@ const WorkflowPage: React.FC = observer(() => {
 
   useEffect(() => {
     workflowStore.loadAllWorkflows();
-  }, [repositoryStore.repository]);
+  }, [repositoryStore.githubClient]);
 
   const handleSettingsClick = () => {
     router.navigate(Routes.Setup);
