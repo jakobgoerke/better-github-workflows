@@ -16,7 +16,7 @@ jobs:
       - name: build
         uses: ./.github/actions/build
 
-      - name: Run unit tests
+      - name: run unit tests
         shell: bash
         run: yarn test
 
