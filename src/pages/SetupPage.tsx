@@ -4,10 +4,10 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Button, Heading, Input } from '~components/common';
-import { useStore } from '~hook/useStore';
-import { TOKEN_STORAGE_KEY } from '~store/repositoryStore';
-import { router } from '~util/router';
-import { Routes } from '~util/routes';
+import { useStore } from '~hooks/useStore';
+import { TOKEN_STORAGE_KEY } from '~stores/repositoryStore';
+import { router } from '~utils/router';
+import { Routes } from '~utils/routes';
 
 const SetupPage: React.FC = observer(() => {
   const { repositoryStore } = useStore();

@@ -1,10 +1,10 @@
 import { action, makeAutoObservable, observable } from 'mobx';
 
-import { GithubClient } from '~client/githubClient';
-import { getRepositoryFromPath, type Repository } from '~util/github';
-import { router } from '~util/router';
-import { Routes } from '~util/routes';
-import { storage } from '~util/storage';
+import { GithubClient } from '~clients/githubClient';
+import { getRepositoryFromPath, type Repository } from '~utils/github';
+import { router } from '~utils/router';
+import { Routes } from '~utils/routes';
+import { storage } from '~utils/storage';
 
 export const TOKEN_STORAGE_KEY = 'githubToken';
 

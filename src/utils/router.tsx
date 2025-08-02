@@ -1,7 +1,7 @@
 import { createMemoryRouter, type RouteObject } from 'react-router';
 
-import { SetupPage } from '~page/SetupPage';
-import { WorkflowPage } from '~page/WorkflowPage';
+import { SetupPage } from '~pages/SetupPage';
+import { WorkflowPage } from '~pages/WorkflowPage';
 
 import { Routes } from './routes';
 

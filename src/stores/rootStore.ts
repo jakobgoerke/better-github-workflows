@@ -1,4 +1,4 @@
-import { RepositoryStore, WorkflowStore } from './';
+import { RepositoryStore, WorkflowStore } from '.';
 
 export class RootStore {
   workflowStore: WorkflowStore;

@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from 'axios';
 
-import type { GhResponse } from '~type/github';
-import type { Repository } from '~util/github';
+import type { GhResponse } from '~types/github';
+import type { Repository } from '~utils/github';
 
 class GithubClient {
   constructor(token: string, repository: Repository) {

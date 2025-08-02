@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { theme } from '~components/ThemeProvider';
-import { ClearIcon } from '~icon/Clear';
+import { ClearIcon } from '~icons/Clear';
 
 interface InputProps extends HTMLMotionProps<'input'> {
   withClearButton?: boolean;

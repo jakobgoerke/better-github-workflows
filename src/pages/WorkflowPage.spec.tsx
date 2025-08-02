@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { Routes } from '~util/routes';
+import { Routes } from '~utils/routes';
 
 import { WorkflowPage } from './WorkflowPage';
 
@@ -45,7 +45,7 @@ describe('WorkflowPage', () => {
 
   it('should load workflows on mount and on repository change', async () => {
     // given
-    const { useStore } = await import('~hook/useStore');
+    const { useStore } = await import('~hooks/useStore');
     const store = useStore();
 
     // when
@@ -57,7 +57,7 @@ describe('WorkflowPage', () => {
 
   it('navigates to setup page when settings button is clicked', async () => {
     const user = userEvent.setup();
-    const { router } = await import('~util/router');
+    const { router } = await import('~utils/router');
 
     render(<WorkflowPage />);
 

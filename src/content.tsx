@@ -5,8 +5,8 @@ import { StyleSheetManager } from 'styled-components';
 
 import { GlobalStyles } from '~components/GlobalStyles';
 import { ThemeProvider } from '~components/ThemeProvider';
-import { RootStoreProvider } from '~hook/useStore';
-import { router } from '~util/router';
+import { RootStoreProvider } from '~hooks/useStore';
+import { router } from '~utils/router';
 
 export const config: PlasmoCSConfig = {
   matches: [

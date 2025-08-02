@@ -1,6 +1,6 @@
 import { action, computed, makeAutoObservable, observable } from 'mobx';
 
-import type { Workflow } from '~type/github';
+import type { Workflow } from '~types/github';
 import type { RepositoryStore } from './repositoryStore';
 import type { RootStore } from './rootStore';
 

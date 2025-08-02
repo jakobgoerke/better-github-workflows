@@ -3,7 +3,7 @@ import React, { type HTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 import { theme } from '~components/ThemeProvider';
-import { SettingsIcon } from '~icon/Settings';
+import { SettingsIcon } from '~icons/Settings';
 
 const SettingsButton: React.FC<MotionProps & HTMLAttributes<HTMLDivElement>> = ({ ...rest }) => {
   return (

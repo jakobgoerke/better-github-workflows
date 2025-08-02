@@ -3,9 +3,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Link } from '~components/common';
-import { useStore } from '~hook/useStore';
-import type { Workflow } from '~type/github';
-import { getWorkflowFileNameFromPath } from '~util/github';
+import { useStore } from '~hooks/useStore';
+import type { Workflow } from '~types/github';
+import { getWorkflowFileNameFromPath } from '~utils/github';
 
 const WorkflowList: React.FC = observer(() => {
   const { repositoryStore, workflowStore } = useStore();
