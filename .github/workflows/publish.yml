@@ -16,7 +16,11 @@ jobs:
       - name: build
         uses: ./.github/actions/build
 
-      - name: run tests
+      - name: Run unit tests
+        shell: bash
+        run: yarn test
+
+      - name: run e2e tests
         uses: ./.github/actions/test
         env:
           E2E_PAT: ${{ secrets.E2E_PAT }}

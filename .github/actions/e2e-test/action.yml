@@ -1,12 +1,7 @@
-name: test
-description: Run all the tests
+name: e2e test
 runs:
   using: 'composite'
   steps:
-    - name: Run unit tests
-      shell: bash
-      run: yarn test
-
     - name: Install playwright browsers
       shell: bash
       run: yarn playwright install --with-deps
