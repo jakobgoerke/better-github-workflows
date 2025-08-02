@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+concurrency:
+  group: ${{ github.workflow }}
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
