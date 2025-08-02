@@ -21,7 +21,7 @@ jobs:
         run: yarn test
 
       - name: run e2e tests
-        uses: ./.github/actions/test
+        uses: ./.github/actions/e2e-test
         env:
           E2E_PAT: ${{ secrets.E2E_PAT }}
 
