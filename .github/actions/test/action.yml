@@ -1,7 +1,12 @@
 name: test
+description: Run all the tests
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
+    - name: Run unit tests
+      shell: bash
+      run: yarn test
+
     - name: Install playwright browsers
       shell: bash
       run: yarn playwright install --with-deps
