@@ -1,9 +1,6 @@
 import { test } from './fixtures';
 
 test('happypath', async ({ page }) => {
-  // Increase timeout for CI environments
-  test.setTimeout(60000);
-
   await page.goto('https://github.com/jakobgoerke/better-github-workflows/actions');
 
   await page.waitForSelector('[data-testid="page-setup"]');

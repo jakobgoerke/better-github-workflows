@@ -13,7 +13,6 @@ export class WorkflowStore {
   private repositoryStore: RepositoryStore;
 
   @observable workflows: Workflow[] = [];
-  @observable isLoading: boolean = false;
   @observable filter: string = '';
 
   @computed public get filteredWorkflows() {
@@ -23,12 +22,11 @@ export class WorkflowStore {
   }
 
   @action public loadAllWorkflows = async () => {
-    if (!this.repositoryStore.githubClient || this.isLoading) {
-      console.warn('GitHub client is not set or already loading workflows');
+    if (!this.repositoryStore.githubClient) {
+      console.warn('GitHub client is not initialized. Cannot load workflows.');
       return;
     }
 
-    this.setLoading(true);
     const firstResult = await this.repositoryStore.githubClient.getWorkflows(1);
     this.setWorkflows(firstResult.workflows);
 
@@ -44,17 +42,11 @@ export class WorkflowStore {
     results.forEach((res) => {
       this.addWorkflows(res.workflows);
     });
-
-    this.setLoading(false);
   };
 
   @action public setFilter = (filter: string) => {
     this.filter = filter;
   };
-
-  @action private setLoading(loading: boolean) {
-    this.isLoading = loading;
-  }
 
   @action private setWorkflows(workflows: Workflow[]) {
     this.workflows = workflows;

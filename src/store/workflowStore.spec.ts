@@ -66,21 +66,6 @@ describe('workflowStore', () => {
       expect(githubClient.getWorkflows).toHaveBeenCalledTimes(5);
       expect(store.workflows.length).toStrictEqual(5);
     });
-
-    it('should not load workflows if already loading', async () => {
-      // given
-      const rootStoreMock = getRootStoreMock();
-      const { githubClient } = rootStoreMock.repositoryStore;
-      const store = new WorkflowStore(rootStoreMock);
-
-      store.isLoading = true;
-
-      // when
-      await store.loadAllWorkflows();
-
-      // then
-      expect(githubClient.getWorkflows).not.toHaveBeenCalled();
-    });
   });
 
   it('should filter workflows by name', () => {
