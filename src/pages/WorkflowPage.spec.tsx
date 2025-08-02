@@ -17,13 +17,13 @@ vi.mock('~components/workflow', () => ({
   WorkflowList: () => <div data-testid="workflow-list">Workflow List</div>
 }));
 
-vi.mock('~util/router', () => ({
+vi.mock('~utils/router', () => ({
   router: {
     navigate: vi.fn()
   }
 }));
 
-vi.mock('~hook/useStore', () => {
+vi.mock('~hooks/useStore', () => {
   const mockLoadAllWorkflows = vi.fn();
 
   return {
