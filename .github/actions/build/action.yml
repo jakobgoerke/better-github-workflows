@@ -1,16 +1,8 @@
 name: build
+description: Build the Firefox and Chrome apps
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '22'
-        cache: 'yarn'
-
-    - name: Install dependencies
-      shell: bash
-      run: yarn install --frozen-lockfile
-
     - name: Build Firefox app
       shell: bash
       run: yarn build:firefox
