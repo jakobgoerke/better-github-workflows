@@ -16,6 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: lint
+        shell: bash
+        run: yarn lint
+
       - name: build
         uses: ./.github/actions/build
 
