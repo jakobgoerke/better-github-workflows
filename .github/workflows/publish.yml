@@ -23,12 +23,12 @@ jobs:
         shell: bash
         run: yarn lint
 
-      - name: build
-        uses: ./.github/actions/build
-
       - name: run unit tests
         shell: bash
         run: yarn test
+
+      - name: build
+        uses: ./.github/actions/build
 
       - name: run e2e tests
         uses: ./.github/actions/e2e-test
