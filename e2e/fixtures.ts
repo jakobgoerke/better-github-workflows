@@ -5,7 +5,8 @@ export const test = base.extend<{
   context: BrowserContext;
   extensionId: string;
 }>({
-  context: async (_, use) => {
+  // biome-ignore lint/correctness/noEmptyPattern: somehow this is required
+  context: async ({}, use) => {
     const pathToExtension = path.join(__dirname, '../build/chrome-mv3-prod');
     const context = await chromium.launchPersistentContext('', {
       headless: false,
