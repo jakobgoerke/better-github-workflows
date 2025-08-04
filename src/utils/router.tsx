@@ -1,22 +1,21 @@
 import { createMemoryRouter, type RouteObject } from 'react-router';
 
+import { Routes } from './routes';
 import { SetupPage } from '~pages/SetupPage';
 import { WorkflowPage } from '~pages/WorkflowPage';
-
-import { Routes } from './routes';
 
 const routes: RouteObject[] = [
   {
     path: Routes.Setup,
-    element: <SetupPage />
+    element: <SetupPage />,
   },
   {
     path: Routes.Workflows,
-    element: <WorkflowPage />
-  }
+    element: <WorkflowPage />,
+  },
 ];
 
 export const router = createMemoryRouter(routes, {
   initialEntries: [Routes.Workflows],
-  initialIndex: 1
+  initialIndex: 1,
 });

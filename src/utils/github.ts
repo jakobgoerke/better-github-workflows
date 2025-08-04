@@ -8,7 +8,7 @@ const getRepositoryFromPath = (url: string): Repository => {
 
   return {
     owner: matches[1],
-    name: matches[2]
+    name: matches[2],
   };
 };
 

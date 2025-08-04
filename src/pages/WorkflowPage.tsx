@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
+import type React from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { Heading } from '~components/common/Heading';
@@ -42,11 +43,6 @@ const Head = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
-
-const Error = styled.span`
-  font-size: 12px;
-  color: #fa5149;
 `;
 
 export { WorkflowPage };

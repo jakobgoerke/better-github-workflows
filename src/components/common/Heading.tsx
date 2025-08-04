@@ -1,4 +1,5 @@
-import React, { type PropsWithChildren } from 'react';
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
 import styled from 'styled-components';
 
 const Heading: React.FC<PropsWithChildren> = ({ children }) => {

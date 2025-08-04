@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react';
-import React, { type ChangeEvent } from 'react';
+import type React from 'react';
+import type { ChangeEvent } from 'react';
 
 import { Input } from '~components/common';
 import { useStore } from '~hooks/useStore';

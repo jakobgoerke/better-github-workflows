@@ -1,5 +1,6 @@
-import { motion, type MotionProps } from 'framer-motion';
-import React, { type AnchorHTMLAttributes } from 'react';
+import { type MotionProps, motion } from 'framer-motion';
+import type React from 'react';
+import type { AnchorHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 import { theme } from '~components/ThemeProvider';
@@ -9,9 +10,10 @@ const Link: React.FC<MotionProps & AnchorHTMLAttributes<HTMLAnchorElement>> = ({
     <_Link
       {...rest}
       whileHover={{
-        backgroundColor: theme().hoverBg
+        backgroundColor: theme().hoverBg,
       }}
-      href={href}>
+      href={href}
+    >
       {children}
     </_Link>
   );

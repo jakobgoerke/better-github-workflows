@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -6,12 +6,12 @@ export default defineConfig({
     alias: [
       {
         find: /^~(.*)$/,
-        replacement: resolve(__dirname, './src/$1')
-      }
-    ]
+        replacement: resolve(__dirname, './src/$1'),
+      },
+    ],
   },
   define: {
-    global: 'globalThis'
+    global: 'globalThis',
   },
   test: {
     environment: 'jsdom',
@@ -21,7 +21,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
-      include: ['src/**/*.ts', 'src/**/*.tsx']
-    }
-  }
+      include: ['src/**/*.ts', 'src/**/*.tsx'],
+    },
+  },
 });

@@ -3,9 +3,8 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { Routes } from '~utils/routes';
-
 import { WorkflowPage } from './WorkflowPage';
+import { Routes } from '~utils/routes';
 
 vi.mock('~components/workflow', () => ({
   SettingsButton: ({ onClick, ...props }) => (
@@ -14,13 +13,13 @@ vi.mock('~components/workflow', () => ({
     </button>
   ),
   WorkflowFilter: () => <div data-testid="workflow-filter">Workflow Filter</div>,
-  WorkflowList: () => <div data-testid="workflow-list">Workflow List</div>
+  WorkflowList: () => <div data-testid="workflow-list">Workflow List</div>,
 }));
 
 vi.mock('~utils/router', () => ({
   router: {
-    navigate: vi.fn()
-  }
+    navigate: vi.fn(),
+  },
 }));
 
 vi.mock('~hooks/useStore', () => {
@@ -29,12 +28,12 @@ vi.mock('~hooks/useStore', () => {
   return {
     useStore: () => ({
       repositoryStore: {
-        repository: null
+        repository: null,
       },
       workflowStore: {
-        loadAllWorkflows: mockLoadAllWorkflows
-      }
-    })
+        loadAllWorkflows: mockLoadAllWorkflows,
+      },
+    }),
   };
 });
 

@@ -1,10 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { GithubClient, WorkflowStates } from '~clients/githubClient';
-
 import type { RepositoryStore } from './repositoryStore';
-import { RootStore } from './rootStore';
+import type { RootStore } from './rootStore';
 import { WorkflowStore } from './workflowStore';
+import { type GithubClient, WorkflowStates } from '~clients/githubClient';
 
 describe('workflowStore', () => {
   const mockWorkflow = {
@@ -17,12 +16,12 @@ describe('workflowStore', () => {
     updated_at: '2023-01-01T00:00:00Z',
     url: 'https://api.github.com/repos/owner/repo/actions/workflows/1',
     html_url: 'https://github.com/owner/repo/actions/workflows/test1.yml',
-    badge_url: 'https://github.com/owner/repo/workflows/Test%20Workflow%201/badge.svg'
+    badge_url: 'https://github.com/owner/repo/workflows/Test%20Workflow%201/badge.svg',
   };
 
   const mockWorkflowsResponse = {
     workflows: [mockWorkflow],
-    total_count: 1
+    total_count: 1,
   };
 
   afterEach(() => {
@@ -55,7 +54,7 @@ describe('workflowStore', () => {
 
       vi.mocked(githubClient.getWorkflows).mockResolvedValue({
         ...mockWorkflowsResponse,
-        total_count: 500
+        total_count: 500,
       });
 
       // when
@@ -87,15 +86,15 @@ describe('workflowStore', () => {
   // helper
   const getRootStoreMock = (): RootStore => {
     const mockGithubClient: Partial<GithubClient> = {
-      getWorkflows: vi.fn()
+      getWorkflows: vi.fn(),
     };
 
     const mockRepositoryStore: Partial<RepositoryStore> = {
-      githubClient: mockGithubClient as GithubClient
+      githubClient: mockGithubClient as GithubClient,
     };
 
     const mockRootStore: Partial<RootStore> = {
-      repositoryStore: mockRepositoryStore as RepositoryStore
+      repositoryStore: mockRepositoryStore as RepositoryStore,
     };
 
     return mockRootStore as RootStore;

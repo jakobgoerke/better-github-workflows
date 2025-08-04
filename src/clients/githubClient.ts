@@ -7,7 +7,7 @@ export const WorkflowStates = {
   DELETED: 'deleted',
   DISABLED_FORK: 'disabled_fork',
   DISABLED_INACTIVITY: 'disabled_inactivity',
-  DISABLED_MANUALLY: 'disabled_manually'
+  DISABLED_MANUALLY: 'disabled_manually',
 } as const;
 
 export type WorkflowState = (typeof WorkflowStates)[keyof typeof WorkflowStates];
@@ -39,8 +39,8 @@ class GithubClient {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
     });
   }
 
@@ -52,8 +52,8 @@ class GithubClient {
         await this.api.get(`/actions/workflows`, {
           params: {
             per_page: 100,
-            page
-          }
+            page,
+          },
         })
       ).data ?? []
     );

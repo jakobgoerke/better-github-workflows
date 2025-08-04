@@ -1,6 +1,6 @@
 import { useStorage } from '@plasmohq/storage/hook';
 import { observer } from 'mobx-react';
-import React from 'react';
+import type React from 'react';
 import styled from 'styled-components';
 
 import { Button, Heading, Input } from '~components/common';

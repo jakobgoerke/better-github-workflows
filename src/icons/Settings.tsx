@@ -1,5 +1,6 @@
-import { motion, type MotionProps } from 'framer-motion';
-import React, { type RefAttributes } from 'react';
+import { type MotionProps, motion } from 'framer-motion';
+import type React from 'react';
+import type { RefAttributes } from 'react';
 import styled from 'styled-components';
 
 const SettingsIcon: React.FC<MotionProps & RefAttributes<SVGSVGElement>> = ({ ...props }) => {

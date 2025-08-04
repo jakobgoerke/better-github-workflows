@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import React from 'react';
+import type React from 'react';
 import styled from 'styled-components';
 
 import { Link } from '~components/common';

@@ -9,30 +9,24 @@ import { RootStoreProvider } from '~hooks/useStore';
 import { router } from '~utils/router';
 
 export const config: PlasmoCSConfig = {
-  matches: [
-    'https://github.com/*/*/actions',
-    'https://github.com/*/*/actions/runs/*',
-    'https://github.com/*/*/actions/workflows/*.yml'
-  ],
-  run_at: 'document_end'
+  matches: ['https://github.com/*/*/actions', 'https://github.com/*/*/actions/runs/*', 'https://github.com/*/*/actions/workflows/*.yml'],
+  run_at: 'document_end',
 };
 
 const styles = document.createElement('style');
 
 const Content: React.FC<PlasmoCSUIProps> = () => {
   return (
-    <>
-      <React.StrictMode>
-        <StyleSheetManager target={styles}>
-          <RootStoreProvider>
-            <ThemeProvider>
-              <GlobalStyles />
-              <RouterProvider router={router} />
-            </ThemeProvider>
-          </RootStoreProvider>
-        </StyleSheetManager>
-      </React.StrictMode>
-    </>
+    <React.StrictMode>
+      <StyleSheetManager target={styles}>
+        <RootStoreProvider>
+          <ThemeProvider>
+            <GlobalStyles />
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </RootStoreProvider>
+      </StyleSheetManager>
+    </React.StrictMode>
   );
 };
 

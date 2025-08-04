@@ -1,11 +1,10 @@
 import { describe, it, vi } from 'vitest';
 
+import { RepositoryStore, TOKEN_STORAGE_KEY } from './repositoryStore';
 import type { Repository } from '~utils/github';
 import { router } from '~utils/router';
 import { Routes } from '~utils/routes';
 import { storage } from '~utils/storage';
-
-import { RepositoryStore, TOKEN_STORAGE_KEY } from './repositoryStore';
 
 describe('repositoryStore', () => {
   afterEach(() => {
@@ -15,7 +14,7 @@ describe('repositoryStore', () => {
   const TOKEN = 'test-token';
   const REPOSITORY: Repository = {
     owner: 'owner',
-    name: 'repo'
+    name: 'repo',
   };
 
   it('should set repository on init', async () => {
@@ -35,7 +34,7 @@ describe('repositoryStore', () => {
     // given
     const otherRepository: Repository = {
       owner: 'other-owner',
-      name: 'other-repo'
+      name: 'other-repo',
     };
     mockToken(TOKEN);
     mockWindowLocation(`/${REPOSITORY.owner}/${REPOSITORY.name}/actions`);
@@ -88,7 +87,7 @@ describe('repositoryStore', () => {
 
   const dispatchLoadEvent = (url: string) => {
     const loadEvent = new CustomEvent('turbo:load', {
-      detail: { url }
+      detail: { url },
     });
     window.dispatchEvent(loadEvent);
   };

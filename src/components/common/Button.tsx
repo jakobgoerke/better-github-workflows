@@ -1,6 +1,7 @@
-import { motion, type MotionProps, type TargetAndTransition } from 'framer-motion';
+import { type MotionProps, motion, type TargetAndTransition } from 'framer-motion';
 import { observer } from 'mobx-react';
-import React, { type ButtonHTMLAttributes } from 'react';
+import type React from 'react';
+import type { ButtonHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 import { theme } from '~components/ThemeProvider';
@@ -19,7 +20,7 @@ const _Button = styled(motion.button)`
 
 const buttonHover: TargetAndTransition = {
   backgroundColor: theme().hoverBg,
-  cursor: 'pointer'
+  cursor: 'pointer',
 };
 
 export { Button };

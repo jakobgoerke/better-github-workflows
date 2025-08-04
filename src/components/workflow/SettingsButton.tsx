@@ -1,5 +1,6 @@
-import { motion, type MotionProps, type TargetAndTransition } from 'framer-motion';
-import React, { type HTMLAttributes } from 'react';
+import { type MotionProps, motion, type TargetAndTransition } from 'framer-motion';
+import type React from 'react';
+import type { HTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 import { theme } from '~components/ThemeProvider';
@@ -15,7 +16,7 @@ const SettingsButton: React.FC<MotionProps & HTMLAttributes<HTMLDivElement>> = (
 
 const wrapperHover: TargetAndTransition = {
   backgroundColor: theme().hoverBg,
-  cursor: 'pointer'
+  cursor: 'pointer',
 };
 
 const Wrapper = styled(motion.div)`

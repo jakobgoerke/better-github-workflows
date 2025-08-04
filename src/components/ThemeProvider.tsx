@@ -1,4 +1,5 @@
-import React, { type PropsWithChildren } from 'react';
+import type React from 'react';
+import type { PropsWithChildren } from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
 import type { AppTheme } from '~types/styled';
@@ -11,7 +12,7 @@ const dark: AppTheme = {
   bg: '#161b22',
   hoverBg: 'rgba(177, 186, 196, 0.12)',
   border: '#30363d',
-  focusColor: '#1f6feb'
+  focusColor: '#1f6feb',
 };
 
 const light: AppTheme = {
@@ -19,12 +20,12 @@ const light: AppTheme = {
   bg: '#f6f8fa',
   hoverBg: 'rgba(208,215,222,0.32)',
   border: '#d0d7de',
-  focusColor: '#0969da'
+  focusColor: '#0969da',
 };
 
 const themes: Map<Theme, AppTheme> = new Map([
   ['dark', dark],
-  ['light', light]
+  ['light', light],
 ]);
 
 const getSelectedGithubTheme = (): Theme => {

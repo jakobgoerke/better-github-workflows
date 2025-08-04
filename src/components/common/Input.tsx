@@ -1,6 +1,6 @@
-import { motion, type HTMLMotionProps, type TargetAndTransition } from 'framer-motion';
+import { type HTMLMotionProps, motion, type TargetAndTransition } from 'framer-motion';
 import { observer } from 'mobx-react';
-import React from 'react';
+import type React from 'react';
 import styled from 'styled-components';
 
 import { theme } from '~components/ThemeProvider';
@@ -41,7 +41,7 @@ const _Input = styled(motion.input)`
 const inputFocus: TargetAndTransition = {
   borderColor: theme().focusColor,
   outline: 'none',
-  boxShadow: `inset 0 0 1px ${theme().focusColor}`
+  boxShadow: `inset 0 0 1px ${theme().focusColor}`,
 };
 
 const ClearButton = styled(motion.button)`
@@ -61,7 +61,7 @@ const ClearButton = styled(motion.button)`
 
 const wrapperHover: TargetAndTransition = {
   backgroundColor: theme().hoverBg,
-  cursor: 'pointer'
+  cursor: 'pointer',
 };
 
 export { Input };

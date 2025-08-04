@@ -1,8 +1,8 @@
 import { action, computed, makeAutoObservable, observable } from 'mobx';
 
-import type { Workflow } from '~types/github';
 import type { RepositoryStore } from './repositoryStore';
 import type { RootStore } from './rootStore';
+import type { Workflow } from '~clients/githubClient';
 
 export class WorkflowStore {
   constructor(rootStore: RootStore) {
