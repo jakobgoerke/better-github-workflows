@@ -9,7 +9,7 @@ concurrency:
   group: ${{ github.workflow }}
 
 jobs:
-  build-and-publish:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,6 +35,21 @@ jobs:
         env:
           E2E_PAT: ${{ secrets.E2E_PAT }}
 
+  publish_firefox:
+    runs-on: ubuntu-latest
+    needs: [test]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: setup
+        uses: ./.github/actions/setup
+
+      - name: build firefox
+        shell: bash
+        run: yarn build:firefox
+
       - name: Install web-ext
         run: yarn global add web-ext
 
@@ -45,6 +60,21 @@ jobs:
             --api-key "${{ secrets.FIREFOX_STORE_JWT_ISSUER }}" \
             --api-secret "${{ secrets.FIREFOX_STORE_JWT_SECRET }}" \
             --channel "listed"
+
+  publish_chrome:
+    runs-on: ubuntu-latest
+    needs: [test]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: setup
+        uses: ./.github/actions/setup
+
+      - name: build chrome
+        shell: bash
+        run: yarn build:chrome
 
       - name: Install chrome webstore upload cli
         run: yarn global add chrome-webstore-upload-cli
