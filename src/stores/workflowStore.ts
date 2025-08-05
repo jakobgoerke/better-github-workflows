@@ -14,6 +14,7 @@ export class WorkflowStore {
 
   @observable workflows: Workflow[] = [];
   @observable filter: string = '';
+  @observable isLoading: boolean = false;
 
   @computed public get filteredWorkflows() {
     return this.workflows.filter((workflow) => {
@@ -27,14 +28,37 @@ export class WorkflowStore {
       return;
     }
 
-    const firstResult = await this.repositoryStore.githubClient.getWorkflows(1);
+    if (this.isLoading) {
+      console.warn('Workflows are already being loaded.');
+      return;
+    }
+
+    this.setLoading(true);
+
+    const firstResult = await this.repositoryStore.githubClient
+      .getWorkflows(1) //
+      .catch((error) => {
+        console.error('Failed to load workflows:', error);
+      });
+
+    if (!firstResult) {
+      console.warn('No workflows found or failed to fetch workflows.');
+      this.setLoading(false);
+      return;
+    }
+
     this.setWorkflows(firstResult.workflows);
 
     const remainingPages = Math.ceil(firstResult.total_count / 100);
 
     const pagePromises = [];
     for (let page = 2; page <= remainingPages; page++) {
-      pagePromises.push(this.repositoryStore.githubClient.getWorkflows(page));
+      pagePromises.push(
+        this.repositoryStore.githubClient.getWorkflows(page).catch((error) => {
+          console.error(`Failed to load workflows for page ${page}:`, error);
+          return { workflows: [] };
+        }),
+      );
     }
 
     const results = await Promise.all(pagePromises);
@@ -42,6 +66,8 @@ export class WorkflowStore {
     results.forEach((res) => {
       this.addWorkflows(res.workflows);
     });
+
+    this.setLoading(false);
   };
 
   @action public setFilter = (filter: string) => {
@@ -54,5 +80,9 @@ export class WorkflowStore {
 
   @action private addWorkflows(workflows: Workflow[]) {
     this.workflows.push(...workflows);
+  }
+
+  @action private setLoading(isLoading: boolean) {
+    this.isLoading = isLoading;
   }
 }
