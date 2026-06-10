@@ -5,10 +5,10 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "verbatimModuleSyntax": true,
+    "moduleResolution": "bundler",
     "paths": {
-      "~*": ["*"]
+      "~*": ["./src/*"]
     },
-    "baseUrl": "./src/",
     "types": ["vitest/globals"]
   }
 }

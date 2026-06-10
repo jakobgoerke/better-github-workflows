@@ -2,9 +2,9 @@ import { observer } from 'mobx-react';
 import type React from 'react';
 import styled from 'styled-components';
 
+import type { Workflow } from '~clients/githubClient';
 import { Link } from '~components/common';
 import { useStore } from '~hooks/useStore';
-import type { Workflow } from '~types/github';
 import { getWorkflowFileNameFromPath } from '~utils/github';
 
 const WorkflowList: React.FC = observer(() => {
