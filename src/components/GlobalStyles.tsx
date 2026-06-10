@@ -9,9 +9,24 @@ export const GlobalStyles = createGlobalStyle`
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
     color: ${({ theme }) => theme.fg};
   }
-  
+
   #plasmo-inline {
     display: block !important;
+  }
+
+  :host {
+    display: block !important;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  #plasmo-shadow-container {
+    display: block;
+    height: 100%;
+  }
+
+  #plasmo-shadow-container > * {
+    height: 100%;
   }
 
   #root {
@@ -20,10 +35,7 @@ export const GlobalStyles = createGlobalStyle`
     font-size: 16px;
     font-weight: 400;
     display: flex;
-  }
-
-  #plasmo-shadow-container {
-    display: block;
+    height: 100%;
   }
 
   code {

@@ -36,6 +36,10 @@ export const getInlineAnchor: PlasmoGetInlineAnchor = () => {
   return document.querySelector('div.PageLayout-columns > div.PageLayout-pane');
 };
 
+const paneStyles = document.createElement('style');
+paneStyles.textContent = '.PageLayout-pane:has(#better-github-workflows) { overflow-y: hidden !important; }';
+document.head.appendChild(paneStyles);
+
 export const mountShadowHost: PlasmoMountShadowHost = ({ shadowHost, anchor }) => {
   anchor.element.innerHTML = '';
   anchor.element.appendChild(shadowHost);

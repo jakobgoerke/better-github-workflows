@@ -34,6 +34,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   border-top: 1px solid ${({ theme }) => theme.border};
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
 `;
 
 export { WorkflowList };
