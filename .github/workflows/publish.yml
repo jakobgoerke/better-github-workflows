@@ -80,10 +80,11 @@ jobs:
         run: yarn global add chrome-webstore-upload-cli
 
       - name: Publish Chrome
+        env:
+          CLIENT_ID: ${{ secrets.CHROME_STORE_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CHROME_STORE_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_STORE_REFRESH_TOKEN }}
         run: |
           chrome-webstore-upload \
             --source "build/chrome-mv3-prod" \
-            --extension-id "${{ secrets.CHROME_STORE_EXTENSION_ID }}" \
-            --client-id "${{ secrets.CHROME_STORE_CLIENT_ID }}" \
-            --client-secret "${{ secrets.CHROME_STORE_CLIENT_SECRET }}" \
-            --refresh-token "${{ secrets.CHROME_STORE_REFRESH_TOKEN }}"
+            --extension-id "${{ secrets.CHROME_STORE_EXTENSION_ID }}"
