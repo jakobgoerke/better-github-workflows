@@ -12,4 +12,4 @@ const RootStoreProvider: React.FC<PropsWithChildren> = ({ children }) => {
   return <StoreContext.Provider value={root}>{children}</StoreContext.Provider>;
 };
 
-export { rootStore, RootStoreProvider, useStore };
+export { RootStoreProvider, rootStore, useStore };

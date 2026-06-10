@@ -28,7 +28,7 @@ export class RepositoryStore {
     }
 
     window.addEventListener('turbo:load', (e) => {
-      // @ts-ignore
+      // @ts-expect-error
       const url = new URL(e.detail.url);
       this.setRepository(getRepositoryFromPath(url.pathname));
     });
