@@ -84,6 +84,7 @@ jobs:
           CLIENT_ID: ${{ secrets.CHROME_STORE_CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CHROME_STORE_CLIENT_SECRET }}
           REFRESH_TOKEN: ${{ secrets.CHROME_STORE_REFRESH_TOKEN }}
+          PUBLISHER_ID: ${{ secrets.CHROME_STORE_PUBLISHER_ID }}
         run: |
           chrome-webstore-upload \
             --source "build/chrome-mv3-prod" \
