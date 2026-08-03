@@ -7,9 +7,9 @@ const StoreContext = createContext<RootStore | undefined>(undefined);
 const useStore = (): RootStore => useContext(StoreContext);
 
 const RootStoreProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const root = rootStore ?? new RootStore();
+  rootStore ??= new RootStore();
 
-  return <StoreContext.Provider value={root}>{children}</StoreContext.Provider>;
+  return <StoreContext.Provider value={rootStore}>{children}</StoreContext.Provider>;
 };
 
-export { RootStoreProvider, rootStore, useStore };
+export { RootStoreProvider, useStore };
