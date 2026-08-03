@@ -2,6 +2,25 @@ name: e2e-test-workflow
 
 on:
   workflow_dispatch:
+    inputs:
+      message:
+        description: 'Some free text input'
+        type: string
+        required: true
+        default: 'weeeeeeeeee'
+      environment:
+        description: 'Some choice input'
+        type: choice
+        required: true
+        default: 'staging'
+        options:
+          - staging
+          - production
+      verbose:
+        description: 'Some boolean input'
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   test:
@@ -9,4 +28,9 @@ jobs:
 
     steps:
     - name: I am just some pipeline for the e2e test
-      run: echo "weeeeeeeeee"
+      run: echo "${{ inputs.message }}"
+
+    - name: I am just some inputs for the e2e test
+      run: |
+        echo "environment: ${{ inputs.environment }}"
+        echo "verbose: ${{ inputs.verbose }}"
