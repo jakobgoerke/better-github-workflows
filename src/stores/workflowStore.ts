@@ -17,8 +17,10 @@ export class WorkflowStore {
   @observable isLoading: boolean = false;
 
   @computed public get filteredWorkflows() {
+    const terms = this.filter.toLowerCase().split(/\s+/).filter(Boolean);
     return this.workflows.filter((workflow) => {
-      return workflow.name.toLowerCase().includes(this.filter.toLowerCase());
+      const name = workflow.name.toLowerCase();
+      return terms.every((term) => name.includes(term));
     });
   }
 

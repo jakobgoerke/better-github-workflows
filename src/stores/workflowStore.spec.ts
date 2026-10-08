@@ -83,6 +83,40 @@ describe('workflowStore', () => {
     expect(store.filteredWorkflows[0]).toStrictEqual(mockWorkflow1);
   });
 
+  it('should filter workflows by all space separated terms in any order', () => {
+    // given
+    const mockWorkflow1 = { ...mockWorkflow, name: 'Deploy Production' };
+    const mockWorkflow2 = { ...mockWorkflow, name: 'Deploy Staging' };
+    const mockWorkflow3 = { ...mockWorkflow, name: 'Build Production' };
+    const rootStoreMock = getRootStoreMock();
+    const store = new WorkflowStore(rootStoreMock);
+
+    store.workflows = [mockWorkflow1, mockWorkflow2, mockWorkflow3];
+
+    // when
+    store.setFilter('prod  deploy ');
+
+    // then
+    expect(store.filteredWorkflows).toHaveLength(1);
+    expect(store.filteredWorkflows[0]).toStrictEqual(mockWorkflow1);
+  });
+
+  it('should return all workflows when filter is only whitespace', () => {
+    // given
+    const mockWorkflow1 = { ...mockWorkflow, name: 'Deploy Production' };
+    const mockWorkflow2 = { ...mockWorkflow, name: 'Build Production' };
+    const rootStoreMock = getRootStoreMock();
+    const store = new WorkflowStore(rootStoreMock);
+
+    store.workflows = [mockWorkflow1, mockWorkflow2];
+
+    // when
+    store.setFilter('   ');
+
+    // then
+    expect(store.filteredWorkflows).toHaveLength(2);
+  });
+
   // helper
   const getRootStoreMock = (): RootStore => {
     const mockGithubClient: Partial<GithubClient> = {
