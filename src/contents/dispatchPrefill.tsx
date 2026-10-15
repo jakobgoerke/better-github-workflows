@@ -14,13 +14,35 @@ export const config: PlasmoCSConfig = {
 const FEEDBACK_TIMEOUT = 1500;
 const SUBMIT_SELECTOR = 'button[type="submit"], input[type="submit"]';
 
+const findSubmitButton = (container: HTMLElement): Element | null => {
+  if (container instanceof HTMLFormElement) {
+    return Array.from(container.elements).find((element) => element.matches(SUBMIT_SELECTOR)) ?? null;
+  }
+
+  return container.querySelector(SUBMIT_SELECTOR);
+};
+
+const getAnchorForm = (element: Element | undefined): HTMLFormElement | null => {
+  if (element instanceof HTMLButtonElement || element instanceof HTMLInputElement) {
+    return element.form;
+  }
+
+  return element?.closest('form') ?? null;
+};
+
 export const getInlineAnchorList: PlasmoGetInlineAnchorList = () => {
   const submitButtons = findDispatchContainers(document)
-    .map((container) => container.querySelector(SUBMIT_SELECTOR))
+    .map(findSubmitButton)
     .filter((element) => !!element);
 
   return submitButtons.map((element) => ({ element, insertPosition: 'beforebegin' as const }));
 };
+
+const footerStyles = document.createElement('style');
+footerStyles.textContent = `
+  [data-component="Dialog.Footer"] [data-loading-wrapper]:has(> plasmo-csui) { display: flex; align-items: center; }
+`;
+document.head.appendChild(footerStyles);
 
 export const getStyle: PlasmoGetStyle = () => {
   const style = document.createElement('style');
@@ -29,20 +51,40 @@ export const getStyle: PlasmoGetStyle = () => {
     :host, #plasmo-shadow-container { display: inline-block; vertical-align: middle; }
 
     button {
-      font: inherit;
-      font-size: 12px;
-      line-height: 20px;
-      padding: 3px 12px;
-      margin-right: 8px;
-      border-radius: 6px;
-      border: 1px solid var(--button-default-borderColor-rest, var(--borderColor-default, #d1d9e0));
-      background-color: var(--button-default-bgColor-rest, var(--bgColor-default, #f6f8fa));
-      color: var(--fgColor-default, #1f2328);
+      appearance: none;
+      display: inline-flex;
+      align-items: center;
+      height: var(--control-medium-size, 2rem);
+      padding: 0 var(--control-medium-paddingInline-normal, 0.75rem);
+      margin-right: var(--base-size-8, 0.5rem);
+      font-family: inherit;
+      font-size: var(--text-body-size-medium, 0.875rem);
+      font-weight: var(--base-text-weight-medium, 500);
+      line-height: var(--text-body-lineHeight-medium, 1.5);
+      white-space: nowrap;
+      border: var(--borderWidth-thin, 1px) solid var(--button-default-borderColor-rest, #d1d9e0);
+      border-radius: var(--borderRadius-medium, 0.375rem);
+      background-color: var(--button-default-bgColor-rest, #f6f8fa);
+      box-shadow: var(--button-default-shadow-resting, 0 1px 0 0 #1f23280a);
+      color: var(--button-default-fgColor-rest, #25292e);
       cursor: pointer;
+      transition: color 80ms cubic-bezier(0.65, 0, 0.35, 1), background-color 80ms cubic-bezier(0.65, 0, 0.35, 1), border-color 80ms cubic-bezier(0.65, 0, 0.35, 1);
     }
 
     button:hover {
-      background-color: var(--button-default-bgColor-hover, var(--bgColor-muted, #eef1f4));
+      background-color: var(--button-default-bgColor-hover, #eff2f5);
+      border-color: var(--button-default-borderColor-hover, #d1d9e0);
+    }
+
+    button:active {
+      background-color: var(--button-default-bgColor-active, #e6eaef);
+      border-color: var(--button-default-borderColor-active, #d1d9e0);
+      transition: none;
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--focus-outlineColor, #0969da);
+      outline-offset: -2px;
     }
 
     button[data-confirmed='true'] {
@@ -58,7 +100,7 @@ const PrefillButton: React.FC<PlasmoCSUIProps> = observer(({ anchor }) => {
   const [record, setRecord] = useState<DispatchInputsRecord | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  const form = anchor?.element.closest<HTMLElement>('form');
+  const form = getAnchorForm(anchor?.element);
   const target = form ? getDispatchTarget(form) : null;
 
   useEffect(() => {
