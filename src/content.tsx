@@ -34,7 +34,9 @@ export const getShadowHostId = () => 'better-github-workflows';
 
 // GitHub is rolling out a React based actions sidebar, so depending on the user either layout is served
 const LEGACY_PANE_SELECTOR = 'div.PageLayout-columns > div.PageLayout-pane';
-const SIDEBAR_NAV_SELECTOR = 'aside[aria-label="Actions"] nav[aria-label="Actions workflows"]';
+
+const SIDEBAR_NAV_SELECTOR =
+  'section[style*="--sidebar-page-layout-top-offset"] aside[aria-label="Actions"] nav[aria-label="Actions workflows"]';
 
 export const getInlineAnchor: PlasmoGetInlineAnchor = () => {
   return document.querySelector(LEGACY_PANE_SELECTOR) ?? document.querySelector(SIDEBAR_NAV_SELECTOR);
