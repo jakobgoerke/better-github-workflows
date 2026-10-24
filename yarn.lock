@@ -5282,11 +5282,6 @@ posthtml@^0.16.4, posthtml@^0.16.5:
     posthtml-parser "^0.11.0"
     posthtml-render "^3.0.0"
 
-prettier@3.9.10:
-  version "3.9.10"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.9.10.tgz#ac378e432f1a7381518f2e080816bbaefa38d585"
-  integrity sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==
-
 pretty-format@^27.0.2:
   version "27.5.1"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-27.5.1.tgz#2181879fdea51a7a5851fb39d920faa63f01d88e"
