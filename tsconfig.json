@@ -3,7 +3,6 @@
   "exclude": ["node_modules"],
   "include": [".plasmo/index.d.ts", "./**/*.ts", "./**/*.tsx"],
   "compilerOptions": {
-    "experimentalDecorators": true,
     "verbatimModuleSyntax": true,
     "moduleResolution": "bundler",
     "paths": {

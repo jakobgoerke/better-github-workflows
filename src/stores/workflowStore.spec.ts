@@ -64,6 +64,35 @@ describe('workflowStore', () => {
       expect(githubClient.getWorkflows).toHaveBeenCalledTimes(5);
       expect(store.workflows.length).toStrictEqual(5);
     });
+
+    it('should reload with a new client while a previous load is pending', async () => {
+      // given
+      const rootStoreMock = getRootStoreMock();
+      const staleClient = rootStoreMock.repositoryStore.githubClient;
+      const store = new WorkflowStore(rootStoreMock);
+      const repositoryStore = store['repositoryStore'];
+
+      let rejectStale: (error: Error) => void;
+      vi.mocked(staleClient.getWorkflows).mockReturnValue(
+        new Promise((_, reject) => {
+          rejectStale = reject;
+        }),
+      );
+      const staleLoad = store.loadAllWorkflows();
+
+      const newClient = { getWorkflows: vi.fn().mockResolvedValue(mockWorkflowsResponse) } as Partial<GithubClient>;
+      repositoryStore.githubClient = newClient as GithubClient;
+
+      // when
+      await store.loadAllWorkflows();
+      rejectStale(new Error('401'));
+      await staleLoad;
+
+      // then
+      expect(newClient.getWorkflows).toHaveBeenCalledWith(1);
+      expect(store.workflows).toStrictEqual(mockWorkflowsResponse.workflows);
+      expect(store.isLoading).toBe(false);
+    });
   });
 
   it('should filter workflows by name', () => {

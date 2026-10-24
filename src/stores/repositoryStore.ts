@@ -1,4 +1,4 @@
-import { action, makeAutoObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 import { GithubClient } from '~clients/githubClient';
 import { getRepositoryFromPath, type Repository } from '~utils/github';
@@ -16,10 +16,10 @@ export class RepositoryStore {
 
   public githubClient: GithubClient | null = null;
 
-  @observable token: string = '';
-  @observable repository: Repository;
+  token: string = '';
+  repository: Repository;
 
-  @action private init = async () => {
+  private init = async () => {
     this.token = await storage.get(TOKEN_STORAGE_KEY);
     this.setRepository(getRepositoryFromPath(window.location.pathname));
 
@@ -34,13 +34,13 @@ export class RepositoryStore {
     });
   };
 
-  @action setToken = (token: string) => {
+  setToken = (token: string) => {
     this.token = token;
     storage.setItem(TOKEN_STORAGE_KEY, token);
     this.setupClient();
   };
 
-  @action private setRepository = (repository: Repository) => {
+  private setRepository = (repository: Repository) => {
     this.repository = repository;
     this.setupClient();
   };

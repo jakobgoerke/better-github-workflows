@@ -1,4 +1,4 @@
-import { action, makeAutoObservable, observable } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 import type { Repository } from '~utils/github';
 import { cacheStorage } from '~utils/storage';
@@ -23,11 +23,11 @@ export class DispatchInputsStore {
     makeAutoObservable(this);
   }
 
-  @observable private records: DispatchInputsByWorkflow = {};
+  private records: DispatchInputsByWorkflow = {};
 
   private loaded: Promise<void> | null = null;
 
-  @action public capture = async (repository: Repository, workflowFile: string, inputs: DispatchInputValues) => {
+  public capture = async (repository: Repository, workflowFile: string, inputs: DispatchInputValues) => {
     if (Object.keys(inputs).length === 0) {
       return;
     }
@@ -64,11 +64,11 @@ export class DispatchInputsStore {
     return this.loaded;
   };
 
-  @action private setRecords(records: DispatchInputsByWorkflow) {
+  private setRecords(records: DispatchInputsByWorkflow) {
     this.records = records;
   }
 
-  @action private setRecord(key: string, record: DispatchInputsRecord) {
+  private setRecord(key: string, record: DispatchInputsRecord) {
     const entries = Object.entries({ ...this.records, [key]: record })
       .sort(([, a], [, b]) => b.ranAt.localeCompare(a.ranAt))
       .slice(0, MAX_STORED_WORKFLOWS);
