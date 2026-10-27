@@ -1,9 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import type { GroupingStore } from './groupingStore';
 import type { RepositoryStore } from './repositoryStore';
 import type { RootStore } from './rootStore';
 import { WorkflowStore } from './workflowStore';
 import { type GithubClient, WorkflowStates } from '~clients/githubClient';
+import { DEFAULT_GROUPING_SETTINGS, type GroupingSettings } from '~utils/grouping';
 
 describe('workflowStore', () => {
   const mockWorkflow = {
@@ -146,8 +148,48 @@ describe('workflowStore', () => {
     expect(store.filteredWorkflows).toHaveLength(2);
   });
 
+  describe('workflowTree', () => {
+    const GROUPING: GroupingSettings = {
+      enabled: true,
+      splitChars: '-, __',
+      groups: [{ id: '1', name: 'tool', children: [] }],
+    };
+
+    it('should be null when grouping is disabled', () => {
+      // given
+      const store = new WorkflowStore(getRootStoreMock({ ...GROUPING, enabled: false }));
+      store.workflows = [mockWorkflow];
+
+      // then
+      expect(store.workflowTree).toBeNull();
+    });
+
+    it('should be null without groups or split chars', () => {
+      expect(new WorkflowStore(getRootStoreMock({ ...GROUPING, groups: [] })).workflowTree).toBeNull();
+      expect(new WorkflowStore(getRootStoreMock({ ...GROUPING, splitChars: ' , ' })).workflowTree).toBeNull();
+    });
+
+    it('should group the filtered workflows', () => {
+      // given
+      const deploy = { ...mockWorkflow, id: 1, name: 'tool-redis__deploy' };
+      const destroy = { ...mockWorkflow, id: 2, name: 'tool-redis__destroy' };
+      const other = { ...mockWorkflow, id: 3, name: 'build' };
+      const store = new WorkflowStore(getRootStoreMock(GROUPING));
+      store.workflows = [deploy, destroy, other];
+
+      // when
+      store.setFilter('deploy');
+
+      // then
+      expect(store.isFiltering).toBe(true);
+      expect(store.workflowTree.groups).toHaveLength(1);
+      expect(store.workflowTree.groups[0].workflows).toStrictEqual([{ workflow: deploy, displayName: 'redis__deploy' }]);
+      expect(store.workflowTree.other).toHaveLength(0);
+    });
+  });
+
   // helper
-  const getRootStoreMock = (): RootStore => {
+  const getRootStoreMock = (grouping: GroupingSettings = DEFAULT_GROUPING_SETTINGS): RootStore => {
     const mockGithubClient: Partial<GithubClient> = {
       getWorkflows: vi.fn(),
     };
@@ -156,8 +198,13 @@ describe('workflowStore', () => {
       githubClient: mockGithubClient as GithubClient,
     };
 
+    const mockGroupingStore: Partial<GroupingStore> = {
+      settings: grouping,
+    };
+
     const mockRootStore: Partial<RootStore> = {
       repositoryStore: mockRepositoryStore as RepositoryStore,
+      groupingStore: mockGroupingStore as GroupingStore,
     };
 
     return mockRootStore as RootStore;

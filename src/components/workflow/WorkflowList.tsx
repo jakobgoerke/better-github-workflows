@@ -2,29 +2,37 @@ import { observer } from 'mobx-react';
 import type React from 'react';
 import styled from 'styled-components';
 
+import { WorkflowGroupNode } from './WorkflowGroup';
+import { WorkflowLink } from './WorkflowLink';
 import type { Workflow } from '~clients/githubClient';
-import { Link } from '~components/common';
 import { useStore } from '~hooks/useStore';
-import { getWorkflowFileNameFromPath } from '~utils/github';
+import { OTHER_GROUP_KEY, OTHER_GROUP_NAME } from '~utils/grouping';
 
 const WorkflowList: React.FC = observer(() => {
-  const { repositoryStore, workflowStore } = useStore();
-
-  const buildWorkflowLink = (path: string): string => {
-    const file = getWorkflowFileNameFromPath(path);
-    return `https://github.com/${repositoryStore.repository.owner}/${repositoryStore.repository.name}/actions/workflows/${file}`;
-  };
+  const { workflowStore } = useStore();
+  const tree = workflowStore.workflowTree;
 
   const sortByName = (a: Workflow, b: Workflow) => {
     return a.name.localeCompare(b.name);
   };
 
+  if (tree) {
+    return (
+      <Wrapper>
+        {tree.groups.map((group) => (
+          <WorkflowGroupNode key={group.key} group={group} />
+        ))}
+        {tree.other.length > 0 && (
+          <WorkflowGroupNode group={{ key: OTHER_GROUP_KEY, name: OTHER_GROUP_NAME, groups: [], workflows: tree.other }} />
+        )}
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper>
       {workflowStore.filteredWorkflows.sort(sortByName).map((workflow) => (
-        <Link data-testid="workflow-link" key={workflow.id} href={buildWorkflowLink(workflow.path)}>
-          {workflow.name}
-        </Link>
+        <WorkflowLink key={workflow.id} workflow={workflow} />
       ))}
     </Wrapper>
   );

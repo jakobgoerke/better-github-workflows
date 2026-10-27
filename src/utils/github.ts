@@ -16,4 +16,9 @@ const getWorkflowFileNameFromPath = (path: string): string => {
   return path.split('/').pop() ?? '';
 };
 
-export { getRepositoryFromPath, getWorkflowFileNameFromPath };
+const buildWorkflowLink = (repository: Repository, path: string): string => {
+  const file = getWorkflowFileNameFromPath(path);
+  return `https://github.com/${repository.owner}/${repository.name}/actions/workflows/${file}`;
+};
+
+export { buildWorkflowLink, getRepositoryFromPath, getWorkflowFileNameFromPath };

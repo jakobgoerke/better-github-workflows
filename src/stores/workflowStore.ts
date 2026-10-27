@@ -1,16 +1,20 @@
 import { makeAutoObservable } from 'mobx';
 
+import type { GroupingStore } from './groupingStore';
 import type { RepositoryStore } from './repositoryStore';
 import type { RootStore } from './rootStore';
 import type { GithubClient, Workflow } from '~clients/githubClient';
+import { buildWorkflowTree, parseSplitChars, type WorkflowTree } from '~utils/grouping';
 
 export class WorkflowStore {
   constructor(rootStore: RootStore) {
     this.repositoryStore = rootStore.repositoryStore;
+    this.groupingStore = rootStore.groupingStore;
     makeAutoObservable(this);
   }
 
   private repositoryStore: RepositoryStore;
+  private groupingStore: GroupingStore;
   private loadingClient: GithubClient | null = null;
 
   workflows: Workflow[] = [];
@@ -23,6 +27,20 @@ export class WorkflowStore {
       const name = workflow.name.toLowerCase();
       return terms.every((term) => name.includes(term));
     });
+  }
+
+  public get isFiltering() {
+    return this.filter.trim() !== '';
+  }
+
+  public get workflowTree(): WorkflowTree | null {
+    const { settings } = this.groupingStore;
+
+    if (!settings.enabled || settings.groups.length === 0 || parseSplitChars(settings.splitChars).length === 0) {
+      return null;
+    }
+
+    return buildWorkflowTree(this.filteredWorkflows, settings);
   }
 
   public loadAllWorkflows = async () => {
