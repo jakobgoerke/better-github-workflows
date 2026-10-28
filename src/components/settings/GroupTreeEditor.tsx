@@ -101,6 +101,17 @@ const GroupNodeEditor: React.FC<GroupNodeEditorProps> = ({ group, path, siblings
           <ActionSpacer />
         )}
       </Actions>
+      {path.length === 0 && (
+        <Label>
+          <Checkbox
+            data-testid="group-keep-prefix"
+            type="checkbox"
+            checked={group.keepPrefix}
+            onChange={(e) => onUpdate(group.id, { keepPrefix: e.target.checked })}
+          />
+          Keep prefixes in workflow names
+        </Label>
+      )}
       {group.children.length > 0 && (
         <Children>
           {group.children.map((child) => (
@@ -266,6 +277,21 @@ const Node = styled.div`
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 8px 4px;
+`;
+
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: -4px;
+  font-size: 12px;
+  color: #848d97;
+  cursor: pointer;
+`;
+
+const Checkbox = styled.input`
+  margin: 0;
+  accent-color: ${({ theme }) => theme.focusColor};
 `;
 
 const Fields = styled.div`

@@ -4,6 +4,7 @@ export interface GroupConfig {
   id: string;
   name: string;
   prefixes: string[];
+  keepPrefix: boolean;
   children: GroupConfig[];
 }
 
@@ -38,6 +39,7 @@ export interface GroupSuggestion {
 export interface ExportedGroupConfig {
   name: string;
   prefixes: string[];
+  keepPrefix: boolean;
   children: ExportedGroupConfig[];
 }
 
@@ -141,6 +143,14 @@ const countWorkflows = (group: WorkflowGroup): number => {
   return group.workflows.length + group.groups.reduce((sum, child) => sum + countWorkflows(child), 0);
 };
 
+const restoreDisplayNames = (group: WorkflowGroup, names: Map<Workflow['id'], string>): WorkflowGroup => {
+  return {
+    ...group,
+    groups: group.groups.map((child) => restoreDisplayNames(child, names)),
+    workflows: group.workflows.map((entry) => ({ ...entry, displayName: names.get(entry.workflow.id) })).sort(sortByDisplayName),
+  };
+};
+
 const groupWorkflows = (
   workflows: GroupedWorkflow[],
   groups: GroupConfig[],
@@ -149,6 +159,7 @@ const groupWorkflows = (
 ): { groups: WorkflowGroup[]; rest: GroupedWorkflow[] } => {
   const buckets = new Map<GroupConfig, GroupedWorkflow[]>(groups.map((group) => [group, []]));
   const rest: GroupedWorkflow[] = [];
+  const unstrippedNames = new Map(workflows.map((entry) => [entry.workflow.id, entry.displayName]));
 
   workflows.forEach((entry) => {
     for (const group of groups) {
@@ -166,12 +177,8 @@ const groupWorkflows = (
       const name = getGroupName(group);
       const key = parentKey ? `${parentKey}/${name}` : name;
       const children = groupWorkflows(buckets.get(group), group.children, splitChars, key);
-      return {
-        key,
-        name,
-        groups: children.groups,
-        workflows: children.rest.sort(sortByDisplayName),
-      };
+      const workflowGroup = { key, name, groups: children.groups, workflows: children.rest.sort(sortByDisplayName) };
+      return group.keepPrefix ? restoreDisplayNames(workflowGroup, unstrippedNames) : workflowGroup;
     })
     .filter((group) => countWorkflows(group) > 0);
 
@@ -185,8 +192,8 @@ const buildWorkflowTree = (workflows: Workflow[], settings: GroupingSettings): W
   return { groups, other: rest.sort(sortByDisplayName) };
 };
 
-const createGroup = (prefixes: string[] = [], name = ''): GroupConfig => {
-  return { id: crypto.randomUUID(), name, prefixes, children: [] };
+const createGroup = (prefixes: string[] = [], name = '', keepPrefix = false): GroupConfig => {
+  return { id: crypto.randomUUID(), name, prefixes, keepPrefix, children: [] };
 };
 
 const mapGroups = (groups: GroupConfig[], id: string, fn: (group: GroupConfig) => GroupConfig | null): GroupConfig[] => {
@@ -227,7 +234,12 @@ const cleanGroupingSettings = (settings: GroupingSettings): GroupingSettings => 
 };
 
 const serializeGroups = (groups: GroupConfig[]): ExportedGroupConfig[] => {
-  return groups.map((group) => ({ name: group.name, prefixes: group.prefixes, children: serializeGroups(group.children) }));
+  return groups.map((group) => ({
+    name: group.name,
+    prefixes: group.prefixes,
+    keepPrefix: group.keepPrefix,
+    children: serializeGroups(group.children),
+  }));
 };
 
 const serializeGroupingSettings = (settings: GroupingSettings): ExportedGroupingSettings => {
@@ -263,14 +275,15 @@ const parseGroups = (value: unknown): GroupConfig[] | null => {
     const isLegacy = entry.prefixes === undefined;
     const name = isLegacy ? '' : (entry.name ?? '');
     const prefixes = isLegacy ? [entry.name] : entry.prefixes;
-    if (typeof name !== 'string' || !isStringArray(prefixes)) {
+    const keepPrefix = entry.keepPrefix ?? false;
+    if (typeof name !== 'string' || !isStringArray(prefixes) || typeof keepPrefix !== 'boolean') {
       return null;
     }
     const children = parseGroups(entry.children);
     if (!children) {
       return null;
     }
-    const group = { ...createGroup(cleanPrefixes(prefixes), name.trim()), children };
+    const group = { ...createGroup(cleanPrefixes(prefixes), name.trim(), keepPrefix), children };
     if (group.prefixes.length > 0) {
       groups.push(group);
     }
@@ -281,7 +294,7 @@ const parseGroups = (value: unknown): GroupConfig[] | null => {
 const migrateGroups = (groups: GroupConfig[]): GroupConfig[] => {
   return groups.map((group) => {
     const migrated = Array.isArray(group.prefixes) ? group : { ...group, name: '', prefixes: [group.name] };
-    return { ...migrated, children: migrateGroups(migrated.children ?? []) };
+    return { ...migrated, keepPrefix: migrated.keepPrefix ?? false, children: migrateGroups(migrated.children ?? []) };
   });
 };
 

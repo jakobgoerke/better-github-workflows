@@ -146,6 +146,26 @@ describe('grouping', () => {
       expect(tree.other).toHaveLength(0);
     });
 
+    it('should keep the prefixes in the names of all workflows of a group that keeps them', () => {
+      // given
+      const activity = buildWorkflow(1, 'core-activity');
+      const bshc = buildWorkflow(2, 'ingress-bshc');
+      const deploy = buildWorkflow(3, 'core-db-deploy');
+      const services = { ...multiGroup('services', ['core', 'ingress'], [group('db')]), keepPrefix: true };
+
+      // when
+      const tree = buildWorkflowTree([activity, bshc, deploy], settings([services]));
+
+      // then
+      const [root] = tree.groups;
+      expect(root.workflows).toStrictEqual([
+        { workflow: activity, displayName: 'core-activity' },
+        { workflow: bshc, displayName: 'ingress-bshc' },
+      ]);
+      expect(root.groups[0].key).toBe('services/db');
+      expect(root.groups[0].workflows).toStrictEqual([{ workflow: deploy, displayName: 'core-db-deploy' }]);
+    });
+
     it('should name a multi prefix group without custom name after its prefixes', () => {
       // when
       const tree = buildWorkflowTree([buildWorkflow(1, 'k8s-deploy')], settings([multiGroup('', ['terraform', 'k8s'])]));
@@ -290,7 +310,7 @@ describe('grouping', () => {
   describe('import / export', () => {
     it('should round trip the settings without ids', () => {
       // given
-      const value = settings([group('tool', [group('infra')]), multiGroup('Infra', ['terraform', 'k8s'])]);
+      const value = settings([group('tool', [group('infra')]), { ...multiGroup('Infra', ['terraform', 'k8s']), keepPrefix: true }]);
 
       // when
       const exported = JSON.parse(JSON.stringify(serializeGroupingSettings(value)));
@@ -302,8 +322,13 @@ describe('grouping', () => {
         enabled: true,
         splitChars: '-, __',
         groups: [
-          { name: '', prefixes: ['tool'], children: [{ name: '', prefixes: ['infra'], children: [] }] },
-          { name: 'Infra', prefixes: ['terraform', 'k8s'], children: [] },
+          {
+            name: '',
+            prefixes: ['tool'],
+            keepPrefix: false,
+            children: [{ name: '', prefixes: ['infra'], keepPrefix: false, children: [] }],
+          },
+          { name: 'Infra', prefixes: ['terraform', 'k8s'], keepPrefix: true, children: [] },
         ],
       });
       expect(serializeGroupingSettings(imported)).toStrictEqual(exported);
@@ -314,7 +339,7 @@ describe('grouping', () => {
       expect(parseGroupingSettings({ groups: [{ prefixes: ['tool'] }] })).toMatchObject({
         enabled: false,
         splitChars: '-',
-        groups: [{ name: '', prefixes: ['tool'], children: [] }],
+        groups: [{ name: '', prefixes: ['tool'], keepPrefix: false, children: [] }],
       });
     });
 
@@ -327,7 +352,7 @@ describe('grouping', () => {
 
       // then
       expect(serializeGroupingSettings(imported).groups).toStrictEqual([
-        { name: '', prefixes: ['tool'], children: [{ name: '', prefixes: ['infra'], children: [] }] },
+        { name: '', prefixes: ['tool'], keepPrefix: false, children: [{ name: '', prefixes: ['infra'], keepPrefix: false, children: [] }] },
       ]);
     });
 
@@ -342,6 +367,7 @@ describe('grouping', () => {
       ['non array prefixes', { groups: [{ prefixes: 'tool' }] }],
       ['a non string prefix', { groups: [{ prefixes: ['tool', 1] }] }],
       ['a non string name', { groups: [{ name: 1, prefixes: ['tool'] }] }],
+      ['a non boolean keep prefix', { groups: [{ prefixes: ['tool'], keepPrefix: 'yes' }] }],
       ['a bad nested child', { groups: [{ prefixes: ['tool'], children: [{ name: 1 }] }] }],
     ])('should reject %s', (_, json) => {
       expect(parseGroupingSettings(json)).toBeNull();
@@ -360,7 +386,15 @@ describe('grouping', () => {
       expect(migrated).toStrictEqual({
         enabled: true,
         splitChars: '-',
-        groups: [{ id: '1', name: '', prefixes: ['tool'], children: [{ id: '2', name: '', prefixes: ['infra'], children: [] }] }],
+        groups: [
+          {
+            id: '1',
+            name: '',
+            prefixes: ['tool'],
+            keepPrefix: false,
+            children: [{ id: '2', name: '', prefixes: ['infra'], keepPrefix: false, children: [] }],
+          },
+        ],
       });
     });
 

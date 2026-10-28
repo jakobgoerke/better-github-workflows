@@ -26,6 +26,7 @@ test('grouping', async ({ page }) => {
   await page.getByTestId('group-prefix-input').nth(0).fill('e2e');
   await page.getByTestId('group-prefix-input').nth(0).press(',');
   await page.getByTestId('group-name-input').fill('Apps & tests');
+  await page.getByTestId('group-card').nth(1).getByTestId('group-keep-prefix').check();
   await expect(page.getByTestId('group-card').nth(1)).toContainText('app, e2e');
   await page.getByTestId('token-save').click();
 
@@ -38,8 +39,8 @@ test('grouping', async ({ page }) => {
   await expect(infra.getByTestId('workflow-link').filter({ hasText: /^redis__deploy$/ })).toBeVisible();
   await expect(tool.getByTestId('workflow-link').filter({ hasText: /^monitoring__deploy$/ })).toBeVisible();
   const apps = page.locator('[data-group-key="Apps & tests"]');
-  await expect(apps.getByTestId('workflow-link').filter({ hasText: /^backend__deploy$/ })).toBeVisible();
-  await expect(apps.getByTestId('workflow-link').filter({ hasText: /^test-workflow$/ })).toBeVisible();
+  await expect(apps.getByTestId('workflow-link').filter({ hasText: /^app-backend__deploy$/ })).toBeVisible();
+  await expect(apps.getByTestId('workflow-link').filter({ hasText: /^e2e-test-workflow$/ })).toBeVisible();
   await expect(other.getByTestId('workflow-link').filter({ hasText: /^toolbox-cleanup$/ })).toBeVisible();
 
   await tool.getByTestId('workflow-group-toggle').first().click();
