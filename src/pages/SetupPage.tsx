@@ -8,7 +8,12 @@ import { GroupingSettings } from '~components/settings';
 import { useStore } from '~hooks/useStore';
 import { GROUPING_STORAGE_KEY } from '~stores/groupingStore';
 import { TOKEN_STORAGE_KEY } from '~stores/repositoryStore';
-import { cleanGroupingSettings, DEFAULT_GROUPING_SETTINGS, type GroupingSettings as GroupingSettingsValue } from '~utils/grouping';
+import {
+  cleanGroupingSettings,
+  DEFAULT_GROUPING_SETTINGS,
+  type GroupingSettings as GroupingSettingsValue,
+  migrateGroupingSettings,
+} from '~utils/grouping';
 import { router } from '~utils/router';
 import { Routes } from '~utils/routes';
 
@@ -19,7 +24,7 @@ const SetupPage: React.FC = observer(() => {
     GROUPING_STORAGE_KEY,
     DEFAULT_GROUPING_SETTINGS,
   );
-  const grouping = { ...DEFAULT_GROUPING_SETTINGS, ...storedGrouping };
+  const grouping = migrateGroupingSettings(storedGrouping);
 
   const save = () => {
     repositoryStore.setToken(token);

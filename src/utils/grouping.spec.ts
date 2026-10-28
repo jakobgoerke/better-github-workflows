@@ -5,13 +5,17 @@ import {
   buildWorkflowTree,
   cleanGroupingSettings,
   createGroup,
+  DEFAULT_GROUPING_SETTINGS,
   type GroupConfig,
   type GroupingSettings,
+  getGroupName,
+  migrateGroupingSettings,
   parseGroupingSettings,
   parseSplitChars,
   removeGroup,
   serializeGroupingSettings,
   stripGroupPrefix,
+  stripGroupPrefixes,
   suggestGroupNames,
   updateGroup,
 } from './grouping';
@@ -33,7 +37,12 @@ describe('grouping', () => {
     badge_url: '',
   });
 
-  const group = (name: string, children: GroupConfig[] = []): GroupConfig => ({ ...createGroup(name), children });
+  const group = (prefix: string, children: GroupConfig[] = []): GroupConfig => ({ ...createGroup([prefix]), children });
+
+  const multiGroup = (name: string, prefixes: string[], children: GroupConfig[] = []): GroupConfig => ({
+    ...createGroup(prefixes, name),
+    children,
+  });
 
   const settings = (groups: GroupConfig[], splitChars = '-, __'): GroupingSettings => ({ enabled: true, splitChars, groups });
 
@@ -75,6 +84,25 @@ describe('grouping', () => {
     });
   });
 
+  describe('stripGroupPrefixes', () => {
+    it('should strip the longest matching prefix', () => {
+      expect(stripGroupPrefixes('app-web-deploy', ['app', 'app-web'], SPLIT_CHARS)).toBe('deploy');
+      expect(stripGroupPrefixes('app-api-deploy', ['app', 'app-web'], SPLIT_CHARS)).toBe('api-deploy');
+    });
+
+    it('should return null when no prefix matches', () => {
+      expect(stripGroupPrefixes('lib-build', ['app', 'tool'], SPLIT_CHARS)).toBeNull();
+      expect(stripGroupPrefixes('lib-build', [], SPLIT_CHARS)).toBeNull();
+    });
+  });
+
+  describe('getGroupName', () => {
+    it('should prefer the custom name and fall back to the prefixes', () => {
+      expect(getGroupName(multiGroup(' Infra ', ['terraform', 'k8s']))).toBe('Infra');
+      expect(getGroupName(multiGroup('', ['terraform', ' k8s ', '']))).toBe('terraform, k8s');
+    });
+  });
+
   describe('buildWorkflowTree', () => {
     it('should group workflows into nested groups and strip their prefixes', () => {
       // given
@@ -94,6 +122,36 @@ describe('grouping', () => {
       expect(tool.groups[0].key).toBe('tool/infra');
       expect(tool.groups[0].workflows).toStrictEqual([{ workflow: redis, displayName: 'redis__deploy' }]);
       expect(tree.other).toStrictEqual([{ workflow: toolbox, displayName: 'toolbox-cleanup' }]);
+    });
+
+    it('should merge workflows of all prefixes into a group with a custom name', () => {
+      // given
+      const plan = buildWorkflow(1, 'terraform-plan');
+      const deploy = buildWorkflow(2, 'k8s__deploy');
+      const redis = buildWorkflow(3, 'k8s-redis-deploy');
+
+      // when
+      const tree = buildWorkflowTree([plan, deploy, redis], settings([multiGroup('Infra', ['terraform', 'k8s'], [group('redis')])]));
+
+      // then
+      expect(tree.groups).toHaveLength(1);
+      const [infra] = tree.groups;
+      expect(infra.key).toBe('Infra');
+      expect(infra.name).toBe('Infra');
+      expect(infra.workflows).toStrictEqual([
+        { workflow: deploy, displayName: 'deploy' },
+        { workflow: plan, displayName: 'plan' },
+      ]);
+      expect(infra.groups.map((g) => g.key)).toStrictEqual(['Infra/redis']);
+      expect(tree.other).toHaveLength(0);
+    });
+
+    it('should name a multi prefix group without custom name after its prefixes', () => {
+      // when
+      const tree = buildWorkflowTree([buildWorkflow(1, 'k8s-deploy')], settings([multiGroup('', ['terraform', 'k8s'])]));
+
+      // then
+      expect(tree.groups[0].key).toBe('terraform, k8s');
     });
 
     it('should put a workflow into the first matching group', () => {
@@ -161,11 +219,11 @@ describe('grouping', () => {
     });
 
     it('should suggest the next segments below a group path', () => {
-      expect(suggestGroupNames(NAMES, ['tool'], SPLIT_CHARS)).toStrictEqual([
+      expect(suggestGroupNames(NAMES, [['tool']], SPLIT_CHARS)).toStrictEqual([
         { name: 'infra', count: 2 },
         { name: 'monitoring', count: 1 },
       ]);
-      expect(suggestGroupNames(NAMES, ['tool', 'infra'], SPLIT_CHARS)).toStrictEqual([
+      expect(suggestGroupNames(NAMES, [['tool'], ['infra']], SPLIT_CHARS)).toStrictEqual([
         { name: 'postgres', count: 1 },
         { name: 'redis', count: 1 },
       ]);
@@ -173,7 +231,15 @@ describe('grouping', () => {
 
     it('should suggest nothing without split chars or for an unknown path', () => {
       expect(suggestGroupNames(NAMES, [], [])).toStrictEqual([]);
-      expect(suggestGroupNames(NAMES, ['unknown'], SPLIT_CHARS)).toStrictEqual([]);
+      expect(suggestGroupNames(NAMES, [['unknown']], SPLIT_CHARS)).toStrictEqual([]);
+    });
+
+    it('should suggest the next segments below any prefix of a multi prefix group', () => {
+      expect(suggestGroupNames(NAMES, [['app', 'tool']], SPLIT_CHARS)).toStrictEqual([
+        { name: 'infra', count: 2 },
+        { name: 'frontend', count: 1 },
+        { name: 'monitoring', count: 1 },
+      ]);
     });
   });
 
@@ -184,35 +250,47 @@ describe('grouping', () => {
       const root = group('root', [child]);
 
       // when
-      const renamed = updateGroup([root], child.id, { name: 'renamed' });
+      const renamed = updateGroup([root], child.id, { prefixes: ['renamed'] });
       const withChild = addChildGroup(renamed, child.id);
       const removed = removeGroup(withChild, child.id);
 
       // then
-      expect(renamed[0].children[0].name).toBe('renamed');
+      expect(renamed[0].children[0].prefixes).toStrictEqual(['renamed']);
       expect(withChild[0].children[0].children).toHaveLength(1);
       expect(removed[0].children).toHaveLength(0);
-      expect(root.children[0].name).toBe('child');
+      expect(root.children[0].prefixes).toStrictEqual(['child']);
     });
 
-    it('should trim names and drop empty groups when cleaning', () => {
+    it('should trim prefixes and drop empty groups when cleaning', () => {
       // given
-      const value = settings([group(' tool ', [group('  ')]), group('')]);
+      const value = settings([group(' tool ', [group('  ')]), group(''), multiGroup('Only name', ['', ' '])]);
 
       // when
       const cleaned = cleanGroupingSettings(value);
 
       // then
       expect(cleaned.groups).toHaveLength(1);
-      expect(cleaned.groups[0].name).toBe('tool');
+      expect(cleaned.groups[0].prefixes).toStrictEqual(['tool']);
       expect(cleaned.groups[0].children).toHaveLength(0);
+    });
+
+    it('should trim the name and drop empty and duplicate prefixes when cleaning', () => {
+      // given
+      const value = settings([multiGroup(' Infra ', ['terraform', ' ', 'k8s', 'Terraform '])]);
+
+      // when
+      const cleaned = cleanGroupingSettings(value);
+
+      // then
+      expect(cleaned.groups[0].name).toBe('Infra');
+      expect(cleaned.groups[0].prefixes).toStrictEqual(['terraform', 'k8s']);
     });
   });
 
   describe('import / export', () => {
     it('should round trip the settings without ids', () => {
       // given
-      const value = settings([group('tool', [group('infra')]), group('app')]);
+      const value = settings([group('tool', [group('infra')]), multiGroup('Infra', ['terraform', 'k8s'])]);
 
       // when
       const exported = JSON.parse(JSON.stringify(serializeGroupingSettings(value)));
@@ -220,12 +298,12 @@ describe('grouping', () => {
 
       // then
       expect(exported).toStrictEqual({
-        version: 1,
+        version: 2,
         enabled: true,
         splitChars: '-, __',
         groups: [
-          { name: 'tool', children: [{ name: 'infra', children: [] }] },
-          { name: 'app', children: [] },
+          { name: '', prefixes: ['tool'], children: [{ name: '', prefixes: ['infra'], children: [] }] },
+          { name: 'Infra', prefixes: ['terraform', 'k8s'], children: [] },
         ],
       });
       expect(serializeGroupingSettings(imported)).toStrictEqual(exported);
@@ -233,11 +311,24 @@ describe('grouping', () => {
     });
 
     it('should fall back to defaults for missing fields', () => {
-      expect(parseGroupingSettings({ groups: [{ name: 'tool' }] })).toMatchObject({
+      expect(parseGroupingSettings({ groups: [{ prefixes: ['tool'] }] })).toMatchObject({
         enabled: false,
         splitChars: '-',
-        groups: [{ name: 'tool', children: [] }],
+        groups: [{ name: '', prefixes: ['tool'], children: [] }],
       });
+    });
+
+    it('should import version 1 configs where the name is the prefix', () => {
+      // given
+      const json = { version: 1, groups: [{ name: 'tool', children: [{ name: 'infra', children: [] }] }] };
+
+      // when
+      const imported = parseGroupingSettings(json);
+
+      // then
+      expect(serializeGroupingSettings(imported).groups).toStrictEqual([
+        { name: '', prefixes: ['tool'], children: [{ name: '', prefixes: ['infra'], children: [] }] },
+      ]);
     });
 
     it.each([
@@ -247,10 +338,39 @@ describe('grouping', () => {
       ['a non boolean enabled', { enabled: 'yes' }],
       ['non string split chars', { splitChars: ['-'] }],
       ['non array groups', { groups: {} }],
-      ['a group without name', { groups: [{ children: [] }] }],
-      ['a bad nested child', { groups: [{ name: 'tool', children: [{ name: 1 }] }] }],
+      ['a group without name or prefixes', { groups: [{ children: [] }] }],
+      ['non array prefixes', { groups: [{ prefixes: 'tool' }] }],
+      ['a non string prefix', { groups: [{ prefixes: ['tool', 1] }] }],
+      ['a non string name', { groups: [{ name: 1, prefixes: ['tool'] }] }],
+      ['a bad nested child', { groups: [{ prefixes: ['tool'], children: [{ name: 1 }] }] }],
     ])('should reject %s', (_, json) => {
       expect(parseGroupingSettings(json)).toBeNull();
+    });
+  });
+
+  describe('migrateGroupingSettings', () => {
+    it('should turn stored legacy group names into prefixes and keep ids', () => {
+      // given
+      const stored = { enabled: true, groups: [{ id: '1', name: 'tool', children: [{ id: '2', name: 'infra', children: [] }] }] };
+
+      // when
+      const migrated = migrateGroupingSettings(stored as unknown as GroupingSettings);
+
+      // then
+      expect(migrated).toStrictEqual({
+        enabled: true,
+        splitChars: '-',
+        groups: [{ id: '1', name: '', prefixes: ['tool'], children: [{ id: '2', name: '', prefixes: ['infra'], children: [] }] }],
+      });
+    });
+
+    it('should keep current groups and fall back to defaults', () => {
+      // given
+      const current = settings([multiGroup('Infra', ['terraform', 'k8s'])]);
+
+      // then
+      expect(migrateGroupingSettings(current)).toStrictEqual(current);
+      expect(migrateGroupingSettings(undefined)).toStrictEqual(DEFAULT_GROUPING_SETTINGS);
     });
   });
 });

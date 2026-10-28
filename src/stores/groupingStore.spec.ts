@@ -8,7 +8,7 @@ describe('groupingStore', () => {
   const SETTINGS: GroupingSettings = {
     enabled: true,
     splitChars: '-, __',
-    groups: [{ id: '1', name: 'tool', children: [] }],
+    groups: [{ id: '1', name: '', prefixes: ['tool'], children: [] }],
   };
 
   afterEach(() => {

@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-import { DEFAULT_GROUPING_SETTINGS, type GroupingSettings } from '~utils/grouping';
+import { DEFAULT_GROUPING_SETTINGS, type GroupingSettings, migrateGroupingSettings } from '~utils/grouping';
 import { cacheStorage, storage } from '~utils/storage';
 
 export const GROUPING_STORAGE_KEY = 'grouping';
@@ -29,7 +29,7 @@ export class GroupingStore {
       }),
     ]);
 
-    this.setLoaded(settings ? { ...DEFAULT_GROUPING_SETTINGS, ...settings } : DEFAULT_GROUPING_SETTINGS, collapsed ?? []);
+    this.setLoaded(migrateGroupingSettings(settings), collapsed ?? []);
   };
 
   public setSettings = async (settings: GroupingSettings) => {

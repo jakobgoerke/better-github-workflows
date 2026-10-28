@@ -152,7 +152,7 @@ describe('workflowStore', () => {
     const GROUPING: GroupingSettings = {
       enabled: true,
       splitChars: '-, __',
-      groups: [{ id: '1', name: 'tool', children: [] }],
+      groups: [{ id: '1', name: '', prefixes: ['tool'], children: [] }],
     };
 
     it('should be null when grouping is disabled', () => {

@@ -12,14 +12,21 @@ test('grouping', async ({ page }) => {
   await page.getByTestId('grouping-enabled').check();
   await page.getByTestId('grouping-splitchars').fill('-, __');
   await page.getByTestId('group-add').click();
-  await page.getByTestId('group-name-input').nth(0).fill('tool');
+  await page.getByTestId('group-prefix-input').nth(0).fill('tool');
+  await page.getByTestId('group-prefix-input').nth(0).press('Enter');
   await page.getByTestId('group-add-child').nth(0).click();
-  await page.getByTestId('group-name-input').nth(1).click();
-  await page.getByTestId('combobox-option').filter({ hasText: 'infra' }).click();
+  await page.getByTestId('group-prefix-input').nth(1).click();
+  await page.getByTestId('chip-option').filter({ hasText: 'infra' }).click();
+  await page.getByTestId('group-toggle').nth(0).click();
+  await expect(page.getByTestId('group-card').nth(0)).toContainText('1 subgroup');
   await page.getByTestId('group-add').click();
-  await page.getByTestId('group-name-input').nth(2).click();
-  await expect(page.getByTestId('combobox-option').filter({ hasText: /^tool\d/ })).toHaveCount(0);
-  await page.getByTestId('combobox-option').filter({ hasText: 'app' }).click();
+  await page.getByTestId('group-prefix-input').nth(0).click();
+  await expect(page.getByTestId('chip-option').filter({ hasText: /^tool\d/ })).toHaveCount(0);
+  await page.getByTestId('chip-option').filter({ hasText: 'app' }).click();
+  await page.getByTestId('group-prefix-input').nth(0).fill('e2e');
+  await page.getByTestId('group-prefix-input').nth(0).press(',');
+  await page.getByTestId('group-name-input').fill('Apps & tests');
+  await expect(page.getByTestId('group-card').nth(1)).toContainText('app, e2e');
   await page.getByTestId('token-save').click();
 
   await page.waitForSelector('[data-testid="page-workflows"]');
@@ -30,12 +37,9 @@ test('grouping', async ({ page }) => {
 
   await expect(infra.getByTestId('workflow-link').filter({ hasText: /^redis__deploy$/ })).toBeVisible();
   await expect(tool.getByTestId('workflow-link').filter({ hasText: /^monitoring__deploy$/ })).toBeVisible();
-  await expect(
-    page
-      .locator('[data-group-key="app"]')
-      .getByTestId('workflow-link')
-      .filter({ hasText: /^backend__deploy$/ }),
-  ).toBeVisible();
+  const apps = page.locator('[data-group-key="Apps & tests"]');
+  await expect(apps.getByTestId('workflow-link').filter({ hasText: /^backend__deploy$/ })).toBeVisible();
+  await expect(apps.getByTestId('workflow-link').filter({ hasText: /^test-workflow$/ })).toBeVisible();
   await expect(other.getByTestId('workflow-link').filter({ hasText: /^toolbox-cleanup$/ })).toBeVisible();
 
   await tool.getByTestId('workflow-group-toggle').first().click();
