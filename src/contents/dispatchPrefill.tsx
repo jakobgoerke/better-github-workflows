@@ -12,6 +12,13 @@ export const config: PlasmoCSConfig = {
 };
 
 const FEEDBACK_TIMEOUT = 1500;
+
+type Feedback = 'prefilled' | 'empty';
+
+const FEEDBACK: Record<Feedback, { icon: string; message: string }> = {
+  prefilled: { icon: '✓', message: 'Prefilled' },
+  empty: { icon: '–', message: 'Nothing to prefill' },
+};
 const SUBMIT_SELECTOR = 'button[type="submit"], input[type="submit"]';
 
 const findSubmitButton = (container: HTMLElement): Element | null => {
@@ -40,7 +47,7 @@ export const getInlineAnchorList: PlasmoGetInlineAnchorList = () => {
 
 const footerStyles = document.createElement('style');
 footerStyles.textContent = `
-  [data-component="Dialog.Footer"] [data-loading-wrapper]:has(> plasmo-csui) { display: flex; align-items: center; }
+  [data-loading-wrapper]:has(> plasmo-csui) { display: flex; align-items: center; }
 `;
 document.head.appendChild(footerStyles);
 
@@ -52,8 +59,8 @@ export const getStyle: PlasmoGetStyle = () => {
 
     button {
       appearance: none;
-      display: inline-flex;
-      align-items: center;
+      display: inline-grid;
+      place-items: center;
       height: var(--control-medium-size, 2rem);
       padding: 0 var(--control-medium-paddingInline-normal, 0.75rem);
       margin-right: var(--base-size-8, 0.5rem);
@@ -87,8 +94,20 @@ export const getStyle: PlasmoGetStyle = () => {
       outline-offset: -2px;
     }
 
-    button[data-confirmed='true'] {
+    .label, .feedback {
+      grid-area: 1 / 1;
+    }
+
+    button[data-feedback] .label {
+      visibility: hidden;
+    }
+
+    button[data-feedback='prefilled'] .feedback {
       color: var(--fgColor-success, #1a7f37);
+    }
+
+    button[data-feedback='empty'] .feedback {
+      color: var(--fgColor-muted, #59636e);
     }
   `;
 
@@ -98,7 +117,7 @@ export const getStyle: PlasmoGetStyle = () => {
 const PrefillButton: React.FC<PlasmoCSUIProps> = observer(({ anchor }) => {
   const { dispatchInputsStore } = useStore();
   const [record, setRecord] = useState<DispatchInputsRecord | null>(null);
-  const [feedback, setFeedback] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   const form = getAnchorForm(anchor?.element);
   const target = form ? getDispatchTarget(form) : null;
@@ -139,18 +158,20 @@ const PrefillButton: React.FC<PlasmoCSUIProps> = observer(({ anchor }) => {
 
     const applied = applyDispatchInputs(form, record.inputs);
 
-    setFeedback(applied > 0 ? '✓ Prefilled' : 'Nothing to prefill');
+    setFeedback(applied > 0 ? 'prefilled' : 'empty');
   };
 
   return (
     <button
       type="button"
-      data-confirmed={!!feedback}
-      title={`Fill in the inputs used on ${new Date(record.ranAt).toLocaleString()}`}
+      data-feedback={feedback ?? undefined}
+      title={feedback ? FEEDBACK[feedback].message : `Fill in the inputs used on ${new Date(record.ranAt).toLocaleString()}`}
+      aria-label={feedback ? FEEDBACK[feedback].message : undefined}
       data-testid="prefill-last-run"
       onClick={handleClick}
     >
-      {feedback ?? 'Prefill'}
+      <span className="label">Prefill</span>
+      {feedback && <span className="feedback">{FEEDBACK[feedback].icon}</span>}
     </button>
   );
 });

@@ -112,7 +112,8 @@ describe('dispatchPrefill', () => {
     expect(form.querySelector<HTMLInputElement>('[name="inputs[message]"]').value).toBe(LAST_RUN.inputs.message);
     expect(form.querySelector<HTMLSelectElement>('[name="inputs[environment]"]').value).toBe(LAST_RUN.inputs.environment);
     expect(form.querySelector<HTMLInputElement>('input[type="checkbox"]').checked).toBe(false);
-    expect(screen.getByTestId('prefill-last-run')).toHaveTextContent('✓ Prefilled');
+    expect(screen.getByTestId('prefill-last-run')).toHaveAttribute('data-feedback', 'prefilled');
+    expect(screen.getByRole('button', { name: 'Prefilled' })).toBeInTheDocument();
     expect(dispatchInputsStoreMock.capture).not.toHaveBeenCalled();
   });
 
@@ -148,8 +149,11 @@ describe('dispatchPrefill', () => {
           <input type="hidden" name="inputs[verbose]" value="false" />
           <input type="checkbox" name="inputs[verbose]" value="true" checked />
         </form>
-        <div data-component="Dialog.Footer">
-          <button type="submit" form="dispatch-form">Run workflow</button>
+        <div class="OverlayFooter">
+          <button type="button">Cancel</button>
+          <div data-loading-wrapper="true">
+            <button type="submit" form="dispatch-form">Run workflow</button>
+          </div>
         </div>
       </div>
     `;
