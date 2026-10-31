@@ -66,6 +66,7 @@ const Wrapper = styled.div`
   gap: 16px;
   height: 100%;
   overflow-y: auto;
+  scrollbar-gutter: stable;
 `;
 
 const Head = styled.div`
