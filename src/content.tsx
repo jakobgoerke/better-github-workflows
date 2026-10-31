@@ -32,8 +32,7 @@ const Content: React.FC<PlasmoCSUIProps> = () => {
 
 export const getShadowHostId = () => 'better-github-workflows';
 
-const SIDEBAR_NAV_SELECTOR =
-  'section[style*="--sidebar-page-layout-top-offset"] aside[aria-label="Actions"] nav[aria-label="Actions workflows"]';
+const SIDEBAR_NAV_SELECTOR = 'section[style*="--sidebar-page-layout-top-offset"] aside[aria-label="Actions"] nav[aria-label="Workflows"]';
 
 export const getInlineAnchor: PlasmoGetInlineAnchor = () => {
   return document.querySelector(SIDEBAR_NAV_SELECTOR);
@@ -43,7 +42,7 @@ const sidebarStyles = document.createElement('style');
 sidebarStyles.textContent = `
   aside[aria-label="Actions"] div:has(> #better-github-workflows) { display: flex; flex-direction: column; flex: 1; min-height: 0; }
   aside[aria-label="Actions"] #better-github-workflows { box-sizing: border-box; padding: 8px; }
-  aside[aria-label="Actions"] div:has(> #better-github-workflows) > nav[aria-label="Actions workflows"] { display: none; }
+  aside[aria-label="Actions"] div:has(> #better-github-workflows) > nav[aria-label="Workflows"] { display: none; }
   aside[aria-label="Actions"] :has(> div > #better-github-workflows) { display: flex; flex-direction: column; overflow-y: hidden; scrollbar-gutter: auto; }
 `;
 document.head.appendChild(sidebarStyles);
